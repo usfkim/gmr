@@ -1,0 +1,30 @@
+/* Broadcast Center Styles */
+.broadcast-card {
+    transition: all 0.3s ease;
+}
+
+.broadcast-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.message-preview {
+    transition: all 0.3s ease;
+}
+
+.delivery-stats {
+    transition: all 0.3s ease;
+}
+
+.priority-indicator {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}

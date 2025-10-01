@@ -1,0 +1,197 @@
+@@ .. @@
+ /* Dark mode specific overrides */
+ .dark-mode body {
+     background: var(--bg);
+     color: var(--text);
+ }
+ 
+ .dark-mode .bg-white {
+     background: var(--surface) !important;
+     color: var(--text) !important;
+ }
+ 
+ .dark-mode .bg-gray-50 {
+     background: linear-gradient(135deg, 
+         rgba(30, 41, 59, 0.8) 0%, 
+         rgba(15, 23, 42, 0.6) 100%) !important;
+ }
+ 
+ .dark-mode .text-gray-900 {
+     color: var(--text) !important;
+ }
+ 
+ .dark-mode .text-gray-800 {
+     color: color-mix(in srgb, var(--text) 90%, white 10%) !important;
+ }
+ 
+ .dark-mode .text-gray-700 {
+     color: color-mix(in srgb, var(--text) 80%, white 20%) !important;
+ }
+ 
+ .dark-mode .text-gray-600 {
+     color: var(--muted) !important;
+ }
+ 
+ .dark-mode .text-gray-500 {
+     color: color-mix(in srgb, var(--muted) 80%, white 20%) !important;
+ }
+ 
+ .dark-mode .text-gray-400 {
+     color: color-mix(in srgb, var(--muted) 60%, white 40%) !important;
+ }
+ 
+ .dark-mode .border-gray-300,
+ .dark-mode .border {
+     border-color: rgba(148, 163, 184, 0.2) !important;
+ }
+ 
+ .dark-mode .border-gray-200 {
+     border-color: rgba(148, 163, 184, 0.15) !important;
+ }
+ 
++.dark-mode .border-gray-100 {
++    border-color: rgba(148, 163, 184, 0.1) !important;
++}
++
+ /* Dark mode card styles */
+ .dark-mode .card-premium {
+     background: var(--surface);
+     border: 1px solid rgba(148, 163, 184, 0.1);
+     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+ }
+ 
+ .dark-mode .glass-card {
+     background: var(--glass);
+     border: 1px solid rgba(148, 163, 184, 0.1);
+     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+ }
+ 
+ /* Dark mode form elements */
+ .dark-mode input,
+ .dark-mode select,
+ .dark-mode textarea {
+     background: var(--surface) !important;
+     color: var(--text) !important;
+     border-color: rgba(148, 163, 184, 0.2) !important;
+ }
+ 
+ .dark-mode input:focus,
+ .dark-mode select:focus,
+ .dark-mode textarea:focus {
+     border-color: var(--primary) !important;
+     box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1) !important;
+ }
+ 
++/* Dark mode buttons */
++.dark-mode button {
++    color: var(--text);
++}
++
++.dark-mode .bg-primary {
++    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-600) 100%) !important;
++    color: white !important;
++}
++
++/* Dark mode navigation */
++.dark-mode .mobile-nav-item {
++    color: var(--text) !important;
++    border-bottom-color: rgba(148, 163, 184, 0.1) !important;
++}
++
++.dark-mode .mobile-nav-item:hover {
++    color: var(--primary) !important;
++}
++
++.dark-mode .mobile-auth-buttons a {
++    color: inherit;
++}
++
++.dark-mode .mobile-btn-secondary {
++    border-color: var(--primary);
++    color: var(--primary);
++}
++
++.dark-mode .mobile-btn-secondary:hover {
++    background: var(--primary);
++    color: white;
++}
++
+/* Mobile menu dark mode fixes */
+.dark-mode .mobile-menu {
+    background: rgba(15, 23, 42, 0.98) !important;
+}
+
+.dark-mode .mobile-menu-content {
+    background: transparent !important;
+    color: var(--text) !important;
+}
+
+.dark-mode .mobile-menu-header {
+    background: rgba(15, 23, 42, 0.95) !important;
+    color: var(--text) !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+.dark-mode .mobile-nav-item {
+    color: var(--text) !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+.dark-mode .mobile-nav-item:hover {
+    color: var(--primary) !important;
+}
+
+.dark-mode .mobile-nav-item i {
+    color: var(--text) !important;
+}
+
+.dark-mode .mobile-nav-item:hover i {
+    color: var(--primary) !important;
+}
+
+.dark-mode .mobile-theme-section {
+    border-top: 1px solid rgba(148, 163, 184, 0.2) !important;
+}
+
+.dark-mode .mobile-theme-label {
+    color: var(--text) !important;
+}
+
+.dark-mode .mobile-btn-secondary {
+    border-color: var(--primary) !important;
+    color: var(--primary) !important;
+}
+
+.dark-mode .mobile-btn-secondary:hover {
+    background: var(--primary) !important;
+    color: white !important;
+}
+
+.dark-mode .mobile-close-btn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: var(--text) !important;
+}
+
+.dark-mode .mobile-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+ /* Dark mode section backgrounds */
+ .dark-mode .section-premium {
+     background: linear-gradient(135deg, 
+         rgba(30, 41, 59, 0.9) 0%, 
+         rgba(15, 23, 42, 0.8) 100%);
+ }
+ 
+ .dark-mode .section-premium::before {
+     background: radial-gradient(circle at 20% 80%, rgba(96, 165, 250, 0.05) 0%, transparent 50%),
+                 radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.05) 0%, transparent 50%);
+ }
+ 
+ /* Dark mode hero section */
+ .dark-mode .hero-section::before {
+     background: linear-gradient(135deg, 
+         rgba(30, 41, 59, 0.9) 0%, 
+         rgba(15, 23, 42, 0.8) 50%, 
+         rgba(30, 41, 59, 0.7) 100%);
+ }

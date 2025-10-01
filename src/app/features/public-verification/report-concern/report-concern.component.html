@@ -1,0 +1,146 @@
+<div class="bg-white min-h-screen">
+    <app-header></app-header>
+    
+    <section class="bg-gradient-to-r from-red-600 to-pink-700 py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl font-bold text-white mb-4">Report a Concern</h1>
+                <p class="text-red-100">Help us maintain healthcare standards by reporting concerns</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto">
+                <div *ngIf="!submitted" class="bg-white rounded-lg shadow-lg border p-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-6">Submit a Report</h2>
+                    
+                    <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Type of Concern *
+                                </label>
+                                <select formControlName="concernType" 
+                                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                                    <option value="">Select concern type</option>
+                                    <option value="unlicensed_practice">Unlicensed Practice</option>
+                                    <option value="fraudulent_credentials">Fraudulent Credentials</option>
+                                    <option value="professional_misconduct">Professional Misconduct</option>
+                                    <option value="facility_violations">Facility Violations</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Practitioner Name
+                                </label>
+                                <input type="text" 
+                                       formControlName="practitionerName"
+                                       placeholder="Name of practitioner (if known)"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    License Number
+                                </label>
+                                <input type="text" 
+                                       formControlName="licenseNumber"
+                                       placeholder="License number (if known)"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Facility Name
+                                </label>
+                                <input type="text" 
+                                       formControlName="facilityName"
+                                       placeholder="Healthcare facility name"
+                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">
+                                    Description *
+                                </label>
+                                <textarea formControlName="description"
+                                          placeholder="Describe your concern in detail..."
+                                          rows="5"
+                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary"></textarea>
+                            </div>
+                            
+                            <div class="border-t border-gray-200 pt-6">
+                                <h3 class="font-medium text-gray-800 mb-4">Contact Information (Optional)</h3>
+                                
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="flex items-center">
+                                            <input type="checkbox" 
+                                                   formControlName="anonymous"
+                                                   class="mr-3 text-red-600">
+                                            <span class="text-sm text-gray-700">Submit anonymously</span>
+                                        </label>
+                                    </div>
+                                    
+                                    <div>
+                                        <input type="text" 
+                                               formControlName="reporterName"
+                                               placeholder="Your name"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                                    </div>
+                                    
+                                    <div>
+                                        <input type="email" 
+                                               formControlName="reporterEmail"
+                                               placeholder="Your email"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                                    </div>
+                                    
+                                    <div>
+                                        <input type="tel" 
+                                               formControlName="reporterPhone"
+                                               placeholder="Your phone number"
+                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8">
+                            <button type="submit" 
+                                    [disabled]="reportForm.invalid || isSubmitting"
+                                    class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition font-medium disabled:opacity-50">
+                                <span *ngIf="!isSubmitting">
+                                    <i class="ri-send-plane-line mr-2"></i>
+                                    Submit Report
+                                </span>
+                                <span *ngIf="isSubmitting" class="flex items-center justify-center">
+                                    <i class="ri-loader-4-line animate-spin mr-2"></i>
+                                    Submitting...
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div *ngIf="submitted" class="bg-white rounded-lg shadow-lg border p-8 text-center">
+                    <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="ri-check-line text-green-600 text-2xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">Report Submitted</h2>
+                    <p class="text-gray-600 mb-6">Thank you for your report. We will investigate this matter.</p>
+                    <button (click)="resetForm()" 
+                            class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
+                        Submit Another Report
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <app-footer></app-footer>
+</div>

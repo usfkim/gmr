@@ -1,0 +1,45 @@
+.contact-input:focus {
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.2);
+}
+
+.custom-file-input {
+    color: transparent;
+    width: 100%;
+    cursor: pointer;
+}
+
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+}
+
+.custom-file-input::before {
+    content: 'Attach File';
+    color: #6B7280;
+    display: inline-block;
+    background: #F9FAFB;
+    border: 1px solid #D1D5DB;
+    border-radius: 8px;
+    padding: 8px 12px;
+    outline: none;
+    white-space: nowrap;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    width: 100%;
+}
+
+.custom-file-input:hover::before {
+    border-color: #0056b3;
+}
+
+.custom-file-input:active::before {
+    background: #F3F4F6;
+}
+
+.custom-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236B7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.5rem center;
+    background-size: 1.5em 1.5em;
+}

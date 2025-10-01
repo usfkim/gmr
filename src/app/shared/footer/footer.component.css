@@ -1,0 +1,37 @@
+/* Footer uses global variables for consistent theming */
+:host {
+    display: block;
+}
+
+.footer {
+    background: #1f2937;
+    color: var(--muted);
+    padding: 2.5rem 1rem;
+    border-top: 1px solid color-mix(in srgb, var(--surface) 85%, var(--muted) 15%);
+}
+
+.dark-mode .footer {
+    background: #0f172a;
+    color: var(--muted);
+}
+
+.footer a {
+    color: var(--muted);
+    transition: color 160ms ease;
+}
+
+.footer a:hover {
+    color: white;
+}
+
+.dark-mode .footer a:hover {
+    color: var(--text);
+}
+
+.footer .credits {
+    color: #9ca3af;
+}
+
+.dark-mode .footer .credits {
+    color: var(--muted);
+}

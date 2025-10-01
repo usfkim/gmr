@@ -1,0 +1,87 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8">
+    <div class="text-center">
+      <div class="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-red-100">
+        <i class="ri-shield-cross-line text-red-600 text-3xl"></i>
+      </div>
+      <h2 class="mt-6 text-3xl font-extrabold text-gray-900">
+        Access Denied
+      </h2>
+      <p class="mt-2 text-sm text-gray-600">
+        You don't have permission to access this resource
+      </p>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-8">
+      <!-- Reason -->
+      <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-800 mb-2">Reason</h3>
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p class="text-sm text-red-800">{{ reason }}</p>
+        </div>
+      </div>
+
+      <!-- Request ID -->
+      <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-800 mb-2">Request ID</h3>
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+          <code class="text-sm font-mono text-gray-700">{{ requestId }}</code>
+        </div>
+        <p class="text-xs text-gray-500 mt-1">
+          Please include this ID when contacting support
+        </p>
+      </div>
+
+      <!-- Actions -->
+      <div class="space-y-3">
+        <button
+          (click)="goBack()"
+          class="w-full bg-gray-500 text-white py-3 rounded-lg hover:bg-gray-600 transition font-medium"
+        >
+          <i class="ri-arrow-left-line mr-2"></i>
+          Go Back
+        </button>
+
+        <button
+          (click)="goHome()"
+          class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium"
+        >
+          <i class="ri-home-line mr-2"></i>
+          Go to Homepage
+        </button>
+
+        <button
+          (click)="contactSupport()"
+          class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition font-medium"
+        >
+          <i class="ri-customer-service-line mr-2"></i>
+          Contact Support
+        </button>
+      </div>
+
+      <!-- Security Notice -->
+      <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div class="flex items-start">
+          <i class="ri-information-line text-yellow-600 text-lg mt-0.5 mr-3"></i>
+          <div>
+            <h4 class="font-medium text-yellow-800 mb-1">Security Notice</h4>
+            <p class="text-sm text-yellow-700">
+              This access attempt has been logged for security monitoring. 
+              Repeated unauthorized access attempts may result in account suspension.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Help Text -->
+    <div class="text-center">
+      <p class="text-xs text-gray-500">
+        Need help? Contact our security team at 
+        <a [href]="'mailto:' + supportEmail" class="text-blue-600 hover:underline">
+          {{ supportEmail }}
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

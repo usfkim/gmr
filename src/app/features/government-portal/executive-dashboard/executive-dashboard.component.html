@@ -1,0 +1,397 @@
+<!-- Government & Regulator Portal - Executive Dashboard -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Dashboard Header -->
+    <section class="bg-gradient-to-r from-indigo-600 to-purple-700 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">Government Portal</h1>
+                    <p class="text-indigo-100">Uganda Medical Registry - Country Command Center</p>
+                    <p class="text-indigo-200 text-sm mt-1" *ngIf="currentUser">
+                        Logged in as: {{ currentUser.email }} ({{ currentUser.role }})
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                    <div class="flex items-center space-x-2">
+                        <label class="text-white text-sm">Timeframe:</label>
+                        <select (change)="onTimeframeChange($any($event.target).value)" 
+                                class="bg-white text-gray-800 px-3 py-1 rounded-lg text-sm">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 90 days</option>
+                            <option value="365">Last year</option>
+                        </select>
+                    </div>
+                    <button (click)="exportData('executive-summary')" 
+                            class="bg-white text-indigo-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
+                        <i class="ri-download-line mr-2"></i>
+                        Export Report
+                    </button>
+                    <button (click)="logout()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium text-sm">
+                        <i class="ri-logout-box-line mr-2"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Executive Overview Stats -->
+    <section class="py-8 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <!-- Total Practitioners Overview -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-6 gap-6 mb-8">
+                <div class="stat-card rounded-lg p-6 text-center">
+                    <div class="text-3xl font-bold text-gray-900 mb-2">{{ formatNumber(practitionerStats.total) }}</div>
+                    <div class="text-sm text-gray-600">Total Practitioners</div>
+                </div>
+                
+                <div class="stat-card rounded-lg p-6 text-center border-l-4 border-green-500">
+                    <div class="text-2xl font-bold text-green-600 mb-2">{{ formatNumber(practitionerStats.active) }}</div>
+                    <div class="text-sm text-gray-600">Active</div>
+                    <div class="text-xs text-green-600 mt-1">{{ formatPercentage((practitionerStats.active / practitionerStats.total) * 100) }}</div>
+                </div>
+                
+                <div class="stat-card rounded-lg p-6 text-center border-l-4 border-orange-500">
+                    <div class="text-2xl font-bold text-orange-600 mb-2">{{ formatNumber(practitionerStats.suspended) }}</div>
+                    <div class="text-sm text-gray-600">Suspended</div>
+                    <div class="text-xs text-orange-600 mt-1">{{ formatPercentage((practitionerStats.suspended / practitionerStats.total) * 100) }}</div>
+                </div>
+                
+                <div class="stat-card rounded-lg p-6 text-center border-l-4 border-red-500">
+                    <div class="text-2xl font-bold text-red-600 mb-2">{{ formatNumber(practitionerStats.revoked) }}</div>
+                    <div class="text-sm text-gray-600">Revoked</div>
+                    <div class="text-xs text-red-600 mt-1">{{ formatPercentage((practitionerStats.revoked / practitionerStats.total) * 100) }}</div>
+                </div>
+                
+                <div class="stat-card rounded-lg p-6 text-center border-l-4 border-gray-500">
+                    <div class="text-2xl font-bold text-gray-600 mb-2">{{ formatNumber(practitionerStats.expired) }}</div>
+                    <div class="text-sm text-gray-600">Expired</div>
+                    <div class="text-xs text-gray-600 mt-1">{{ formatPercentage((practitionerStats.expired / practitionerStats.total) * 100) }}</div>
+                </div>
+                
+                <div class="stat-card rounded-lg p-6 text-center border-l-4 border-blue-500">
+                    <div class="text-2xl font-bold text-blue-600 mb-2">{{ formatNumber(practitionerStats.provisional) }}</div>
+                    <div class="text-sm text-gray-600">Provisional</div>
+                    <div class="text-xs text-blue-600 mt-1">{{ formatPercentage((practitionerStats.provisional / practitionerStats.total) * 100) }}</div>
+                </div>
+            </div>
+            
+            <!-- Main Dashboard Grid -->
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Left Column - Main Metrics -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Profession Breakdown -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-semibold text-gray-800">Practitioners by Profession</h2>
+                            <button (click)="exportData('profession-breakdown')" 
+                                    class="text-primary hover:text-blue-700 text-sm font-medium">
+                                <i class="ri-download-line mr-1"></i>Export
+                            </button>
+                        </div>
+                        <div class="space-y-4">
+                            <div *ngFor="let profession of professionBreakdown" 
+                                 class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                                <div class="flex items-center">
+                                    <div class="w-3 h-3 bg-primary rounded-full mr-3"></div>
+                                    <div>
+                                        <div class="font-medium text-gray-800">{{ profession.profession }}</div>
+                                        <div class="text-sm text-gray-600">{{ formatNumber(profession.count) }} practitioners</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-semibold text-gray-800">{{ formatPercentage(profession.percentage) }}</div>
+                                    <div class="trend-indicator" [ngClass]="getTrendIcon(profession.trend)">
+                                        <i [ngClass]="getTrendIcon(profession.trend)"></i>
+                                        <span class="ml-1">{{ formatPercentage(profession.trendValue) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Regional Distribution Heatmap -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-semibold text-gray-800">Regional Distribution</h2>
+                            <div class="flex items-center space-x-2">
+                                <select (change)="onRegionChange($any($event.target).value)" 
+                                        class="border border-gray-300 rounded-lg px-3 py-1 text-sm">
+                                    <option value="all">All Regions</option>
+                                    <option value="central">Central</option>
+                                    <option value="western">Western</option>
+                                    <option value="eastern">Eastern</option>
+                                    <option value="northern">Northern</option>
+                                </select>
+                                <button (click)="exportData('regional-data')" 
+                                        class="text-primary hover:text-blue-700 text-sm font-medium">
+                                    <i class="ri-download-line mr-1"></i>Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div *ngFor="let region of regionData" 
+                                 class="heatmap-cell p-4 border border-gray-200 rounded-lg"
+                                 [ngClass]="region.shortage ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h3 class="font-medium text-gray-800">{{ region.district }}</h3>
+                                    <span *ngIf="region.shortage" 
+                                          class="shortage-indicator bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                                        Shortage
+                                    </span>
+                                </div>
+                                <div class="text-sm text-gray-600 space-y-1">
+                                    <div>Practitioners: {{ formatNumber(region.practitioners) }}</div>
+                                    <div>Population: {{ formatNumber(region.population) }}</div>
+                                    <div class="font-medium" [ngClass]="region.shortage ? 'text-red-600' : 'text-green-600'">
+                                        Ratio: {{ region.ratio }}/10k
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Fraud & Irregularity Alerts -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-semibold text-gray-800">Fraud & Irregularity Alerts</h2>
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-red-100 text-red-800 text-xs px-2 py-1 rounded-full">
+                                    {{ getPendingAlertsCount() }} Pending
+                                </span>
+                                <button (click)="exportData('fraud-alerts')" 
+                                        class="text-primary hover:text-blue-700 text-sm font-medium">
+                                    <i class="ri-download-line mr-1"></i>Export
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <div *ngFor="let alert of fraudAlerts" 
+                                 class="alert-card p-4 border rounded-lg"
+                                 [ngClass]="getSeverityColor(alert.severity)">
+                                <div class="flex items-start justify-between">
+                                    <div class="flex-1">
+                                        <div class="flex items-center mb-2">
+                                            <span class="font-medium text-gray-800 mr-2">{{ alert.id }}</span>
+                                            <span class="text-xs px-2 py-1 rounded-full"
+                                                  [ngClass]="getSeverityColor(alert.severity)">
+                                                {{ alert.severity | titlecase }}
+                                            </span>
+                                        </div>
+                                        <h3 class="font-medium text-gray-800 mb-1">{{ alert.description }}</h3>
+                                        <div class="text-sm text-gray-600 space-y-1">
+                                            <div>Practitioner: {{ alert.practitioner }}</div>
+                                            <div>License: {{ alert.licenseNumber }}</div>
+                                            <div>Detected: {{ alert.dateDetected | date:'mediumDate' }}</div>
+                                            <div *ngIf="alert.assignedTo">Assigned to: {{ alert.assignedTo }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col items-end space-y-2">
+                                        <span class="text-xs px-2 py-1 rounded-full"
+                                              [ngClass]="{
+                                                'bg-yellow-100 text-yellow-800': alert.status === 'pending',
+                                                'bg-blue-100 text-blue-800': alert.status === 'investigating',
+                                                'bg-green-100 text-green-800': alert.status === 'resolved',
+                                                'bg-gray-100 text-gray-800': alert.status === 'false_positive'
+                                              }">
+                                            {{ alert.status | titlecase }}
+                                        </span>
+                                        <button (click)="investigateAlert(alert.id)" 
+                                                class="bg-primary text-white px-3 py-1 rounded text-xs hover:bg-blue-700 transition">
+                                            Investigate
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Sidebar Metrics -->
+                <div class="space-y-6">
+                    <!-- Compliance Metrics -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Compliance Overview</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-600">CPD Compliance</span>
+                                    <span class="font-medium">{{ formatPercentage(complianceMetrics.cpdCompliance) }}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full" 
+                                         [style.width.%]="complianceMetrics.cpdCompliance"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-600">On-time Renewals</span>
+                                    <span class="font-medium">{{ formatPercentage(complianceMetrics.renewalOnTime) }}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full" 
+                                         [style.width.%]="complianceMetrics.renewalOnTime"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-600">Documentation Complete</span>
+                                    <span class="font-medium">{{ formatPercentage(complianceMetrics.documentationComplete) }}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-purple-500 h-2 rounded-full" 
+                                         [style.width.%]="complianceMetrics.documentationComplete"></div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span class="text-gray-600">Facility Accreditation</span>
+                                    <span class="font-medium">{{ formatPercentage(complianceMetrics.facilityAccreditation) }}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-orange-500 h-2 rounded-full" 
+                                         [style.width.%]="complianceMetrics.facilityAccreditation"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Workforce Gaps -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Critical Workforce Gaps</h3>
+                        <div class="space-y-3">
+                            <div *ngFor="let gap of workforceGaps" 
+                                 class="p-3 border border-gray-200 rounded-lg">
+                                <div class="flex items-center justify-between mb-2">
+                                    <h4 class="font-medium text-gray-800 text-sm">{{ gap.specialty }}</h4>
+                                    <span class="w-3 h-3 rounded-full" [ngClass]="getUrgencyColor(gap.urgency)"></span>
+                                </div>
+                                <div class="text-xs text-gray-600 space-y-1">
+                                    <div>{{ gap.region }} Region</div>
+                                    <div>{{ gap.currentCount }}/{{ gap.requiredCount }} ({{ formatPercentage(gap.shortagePercentage) }} shortage)</div>
+                                    <div class="text-red-600 font-medium">{{ gap.urgency | titlecase }} Priority</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- API Usage Stats -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">API Usage</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Total Requests</span>
+                                <span class="font-semibold">{{ formatNumber(apiUsageStats.totalRequests) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Success Rate</span>
+                                <span class="font-semibold text-green-600">{{ formatPercentage(apiUsageStats.successRate) }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-600">Avg Response</span>
+                                <span class="font-semibold">{{ apiUsageStats.averageResponseTime }}ms</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <h4 class="font-medium text-gray-800 mb-3 text-sm">Top API Consumers</h4>
+                            <div class="space-y-2">
+                                <div *ngFor="let consumer of getTopConsumers()" 
+                                     class="flex justify-between text-sm">
+                                    <span class="text-gray-600">{{ consumer.name }}</span>
+                                    <span class="font-medium">{{ formatPercentage(consumer.percentage) }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cross-Border Mobility -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Cross-Border Mobility</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="text-center p-3 bg-blue-50 rounded-lg">
+                                <div class="text-2xl font-bold text-blue-600">{{ formatNumber(crossBorderData.inboundRequests) }}</div>
+                                <div class="text-xs text-gray-600">Inbound Requests</div>
+                            </div>
+                            <div class="text-center p-3 bg-green-50 rounded-lg">
+                                <div class="text-2xl font-bold text-green-600">{{ formatNumber(crossBorderData.outboundRequests) }}</div>
+                                <div class="text-xs text-gray-600">Outbound Requests</div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <h4 class="font-medium text-gray-800 text-sm">Top Destinations</h4>
+                            <div *ngFor="let destination of getTopDestinations()" 
+                                 class="flex justify-between text-sm">
+                                <span class="text-gray-600">{{ destination.country }}</span>
+                                <span class="font-medium">{{ destination.recognitions }}/{{ destination.requests }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Activity Feed -->
+                <div class="space-y-6">
+                    <!-- Recent Activities -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Activities</h3>
+                        <div class="mb-4">
+                            <div class="flex space-x-2">
+                                <a routerLink="/government/analytics" 
+                                   class="bg-cyan-500 text-white px-4 py-2 rounded-lg hover:bg-cyan-600 transition text-sm">
+                                    <i class="ri-line-chart-line mr-2"></i>Analytics
+                                </a>
+                                <a routerLink="/government/communications" 
+                                   class="bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition text-sm">
+                                    <i class="ri-broadcast-line mr-2"></i>Communications
+                                </a>
+                                <a routerLink="/government/data-governance" 
+                                   class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition text-sm">
+                                    <i class="ri-shield-check-line mr-2"></i>Data Governance
+                                </a>
+                                <a routerLink="/government/investigations" 
+                                   class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition text-sm">
+                                    <i class="ri-search-eye-line mr-2"></i>Investigations
+                                </a>
+                                <a routerLink="/government/licensing" 
+                                   class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm">
+                                    <i class="ri-settings-line mr-2"></i>Licensing
+                                </a>
+                                <a routerLink="/government/registries" 
+                                   class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition text-sm">
+                                    <i class="ri-database-line mr-2"></i>Registries
+                                </a>
+                            </div>
+                        </div>
+                        <div class="activity-timeline">
+                            <div *ngFor="let activity of recentActivities" class="activity-item">
+                                <div class="activity-icon" [ngClass]="activity.iconColor">
+                                    <i [ngClass]="activity.icon" class="text-xs"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-medium text-gray-800 text-sm">{{ activity.title }}</h4>
+                                    <p class="text-xs text-gray-600 mb-1">{{ activity.description }}</p>
+                                    <div class="flex items-center justify-between text-xs text-gray-500">
+                                        <span>{{ activity.timestamp | date:'short' }}</span>
+                                        <span>{{ activity.user }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

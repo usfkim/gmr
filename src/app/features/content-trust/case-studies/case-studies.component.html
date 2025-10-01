@@ -1,0 +1,222 @@
+<!-- Case Studies -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Case Studies Header -->
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-700 py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl font-bold text-white mb-4">Implementation Case Studies</h1>
+                <p class="text-xl text-blue-100 mb-8">
+                    Real-world implementations across Africa with measurable outcomes and lessons learned
+                </p>
+                
+                <!-- Featured Metrics -->
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ getFeaturedCaseStudies().length }}</div>
+                        <div class="text-sm text-blue-100">Published Studies</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">63K+</div>
+                        <div class="text-sm text-blue-100">Practitioners Covered</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">72%</div>
+                        <div class="text-sm text-blue-100">Avg. Fraud Reduction</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Filters -->
+    <section class="py-6 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                        <select (change)="onCountryChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Countries</option>
+                            <option value="Uganda">Uganda</option>
+                            <option value="Ghana">Ghana</option>
+                            <option value="Kenya">Kenya</option>
+                            <option value="Nigeria">Nigeria</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select (change)="onStatusChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Statuses</option>
+                            <option value="completed">Completed</option>
+                            <option value="ongoing">Ongoing</option>
+                            <option value="planned">Planned</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-end">
+                        <button (click)="applyFilters()" 
+                                class="w-full bg-primary text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
+                            <i class="ri-refresh-line mr-2"></i>
+                            Filter Studies
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Case Studies Grid -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="space-y-8">
+                <div *ngFor="let study of filteredCaseStudies" 
+                     class="bg-white rounded-lg shadow-sm border">
+                    <!-- Study Header -->
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-start justify-between">
+                            <div class="flex items-center">
+                                <span class="text-4xl mr-4">{{ study.flag }}</span>
+                                <div>
+                                    <h3 class="text-xl font-semibold text-gray-800">{{ study.title }}</h3>
+                                    <p class="text-gray-600">{{ study.subtitle }}</p>
+                                    <div class="flex items-center mt-2">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                                              [ngClass]="getStatusColor(study.status)">
+                                            {{ getStatusDisplayName(study.status) }}
+                                        </span>
+                                        <span class="text-sm text-gray-500 ml-3">
+                                            {{ formatDate(study.launchDate) }} • {{ study.duration }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button (click)="downloadCaseStudy(study.downloadUrl)" 
+                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition font-medium">
+                                <i class="ri-download-line mr-2"></i>
+                                Download PDF
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Study Content -->
+                    <div class="p-6">
+                        <div class="grid lg:grid-cols-3 gap-8">
+                            <!-- Key Metrics -->
+                            <div>
+                                <h4 class="font-medium text-gray-800 mb-4">Key Metrics</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Practitioners</span>
+                                        <span class="font-semibold text-gray-800">{{ formatNumber(study.keyMetrics.practitionersRegistered) }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Facilities</span>
+                                        <span class="font-semibold text-gray-800">{{ formatNumber(study.keyMetrics.facilitiesOnboarded) }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Fraud Reduction</span>
+                                        <span class="font-semibold text-green-600">{{ study.keyMetrics.fraudCasesReduced }}%</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Compliance Improvement</span>
+                                        <span class="font-semibold text-blue-600">{{ study.keyMetrics.complianceImprovement }}%</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Verification Time</span>
+                                        <span class="font-semibold text-purple-600">{{ study.keyMetrics.timeToVerification }}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-sm text-gray-600">Cost Savings</span>
+                                        <span class="font-semibold text-emerald-600">{{ formatCurrency(study.keyMetrics.costSavings) }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Challenges & Solutions -->
+                            <div>
+                                <h4 class="font-medium text-gray-800 mb-4">Challenges & Solutions</h4>
+                                
+                                <div class="mb-6">
+                                    <h5 class="text-sm font-medium text-red-700 mb-2">Key Challenges</h5>
+                                    <ul class="space-y-1">
+                                        <li *ngFor="let challenge of study.challenges.slice(0, 3)" 
+                                            class="text-sm text-gray-600 flex items-start">
+                                            <i class="ri-close-line text-red-500 mr-2 mt-0.5"></i>
+                                            {{ challenge }}
+                                        </li>
+                                    </ul>
+                                </div>
+                                
+                                <div>
+                                    <h5 class="text-sm font-medium text-green-700 mb-2">Solutions Implemented</h5>
+                                    <ul class="space-y-1">
+                                        <li *ngFor="let solution of study.solutions.slice(0, 3)" 
+                                            class="text-sm text-gray-600 flex items-start">
+                                            <i class="ri-check-line text-green-500 mr-2 mt-0.5"></i>
+                                            {{ solution }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Outcomes & Impact -->
+                            <div>
+                                <h4 class="font-medium text-gray-800 mb-4">Outcomes & Impact</h4>
+                                <ul class="space-y-2">
+                                    <li *ngFor="let outcome of study.outcomes" 
+                                        class="text-sm text-gray-600 flex items-start">
+                                        <i class="ri-arrow-right-s-line text-blue-500 mr-2 mt-0.5"></i>
+                                        {{ outcome }}
+                                    </li>
+                                </ul>
+                                
+                                <!-- Stakeholder Quotes -->
+                                <div *ngIf="study.stakeholders.length > 0" class="mt-6">
+                                    <h5 class="text-sm font-medium text-gray-700 mb-3">Stakeholder Feedback</h5>
+                                    <div *ngFor="let stakeholder of study.stakeholders.slice(0, 1)" 
+                                         class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                        <p class="text-sm text-blue-800 italic mb-2">"{{ stakeholder.quote }}"</p>
+                                        <div class="text-xs text-blue-600">
+                                            <strong>{{ stakeholder.name }}</strong><br>
+                                            {{ stakeholder.role }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Citations -->
+                        <div *ngIf="study.citations.length > 0" class="mt-8 pt-6 border-t border-gray-200">
+                            <h4 class="font-medium text-gray-800 mb-4">Academic Citations</h4>
+                            <div class="space-y-3">
+                                <div *ngFor="let citation of study.citations" 
+                                     class="bg-gray-50 rounded-lg p-4">
+                                    <h5 class="font-medium text-gray-800 mb-1">{{ citation.title }}</h5>
+                                    <div class="text-sm text-gray-600 space-y-1">
+                                        <div>{{ citation.source }} • {{ formatDate(citation.date) }}</div>
+                                        <div *ngIf="citation.url">
+                                            <a [href]="citation.url" target="_blank" 
+                                               class="text-blue-600 hover:text-blue-800 transition">
+                                                <i class="ri-external-link-line mr-1"></i>
+                                                View Publication
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

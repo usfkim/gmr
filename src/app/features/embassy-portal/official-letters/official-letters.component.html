@@ -1,0 +1,37 @@
+<div class="bg-white min-h-screen">
+    <app-header></app-header>
+    
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-700 py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-2xl font-bold text-white">Official Letters</h1>
+            <p class="text-blue-100">Manage verification letters and documents</p>
+        </div>
+    </section>
+    
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6">Generated Letters</h2>
+                
+                <div class="space-y-4">
+                    <div *ngFor="let letter of filteredLetters" 
+                         class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="font-medium text-gray-800">{{ letter.letterReference }}</h3>
+                                <p class="text-sm text-gray-600">{{ letter.practitionerName }}</p>
+                                <p class="text-xs text-gray-500">{{ letter.verificationPurpose }}</p>
+                            </div>
+                            <button (click)="downloadLetter(letter.id)" 
+                                    class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                                Download
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <app-footer></app-footer>
+</div>

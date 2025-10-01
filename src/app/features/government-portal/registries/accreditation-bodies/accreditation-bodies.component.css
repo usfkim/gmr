@@ -1,0 +1,71 @@
+/* Accreditation Bodies Styles */
+.accreditation-card {
+    transition: all 0.3s ease;
+}
+
+.accreditation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.specialty-tag {
+    transition: all 0.3s ease;
+}
+
+.specialty-tag:hover {
+    transform: scale(1.05);
+}
+
+.score-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+.action-button {
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.contact-info {
+    transition: all 0.3s ease;
+}
+
+.contact-info:hover {
+    color: var(--primary);
+}
+
+/* Status indicators */
+.status-recognized {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-provisional {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-suspended {
+    background-color: #fed7aa;
+    color: #c2410c;
+}
+
+.status-revoked {
+    background-color: #fecaca;
+    color: #991b1b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .accreditation-card {
+        margin-bottom: 16px;
+    }
+    
+    .action-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}

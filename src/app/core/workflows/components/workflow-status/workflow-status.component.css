@@ -1,0 +1,77 @@
+/* Workflow Status Component Styles */
+.workflow-container {
+    transition: all 0.3s ease;
+}
+
+.workflow-container:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+.step-indicator {
+    transition: all 0.3s ease;
+}
+
+.step-indicator.completed {
+    transform: scale(1.1);
+}
+
+.step-indicator.active {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.status-badge {
+    transition: all 0.3s ease;
+}
+
+.workflow-step {
+    transition: all 0.3s ease;
+}
+
+.workflow-step:hover {
+    background-color: rgba(59, 130, 246, 0.02);
+    border-radius: 4px;
+    padding: 4px;
+    margin: -4px;
+}
+
+/* Status-specific styling */
+.status-completed {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.status-failed {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.status-in-progress {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.status-cancelled {
+    background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .workflow-container {
+        padding: 16px;
+    }
+    
+    .step-indicator {
+        width: 24px;
+        height: 24px;
+    }
+}

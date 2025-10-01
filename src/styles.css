@@ -1,0 +1,547 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import 'remixicon/fonts/remixicon.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 400;
+    font-style: normal;
+    scroll-behavior: smooth;
+}
+
+/* Prevent accidental horizontal scroll on mobile */
+html, body { overflow-x: hidden; }
+
+/* Premium Design Variables */
+:root {
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --blur-backdrop: blur(20px);
+}
+
+/* Global color variables and dark-mode support */
+:root {
+    --bg: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    --surface: #ffffff;
+    --primary: #3b82f6;
+    --primary-600: #2563eb;
+    --primary-700: #1d4ed8;
+    --accent: #06d6a0;
+    --accent-600: #059669;
+    --muted: #64748b;
+    --text: #111827;
+    --border: rgba(148, 163, 184, 0.2);
+    --glass: rgba(255, 255, 255, 0.8);
+}
+
+/* Palette B */
+.palette-b {
+    --primary: #06b6d4;
+    --primary-600: #0891b2;
+    --primary-700: #0e7490;
+    --accent: #f59e0b;
+    --accent-600: #d97706;
+    --muted: #64748b;
+}
+
+/* Palette C */
+.palette-c {
+    --primary: #8b5cf6;
+    --primary-600: #7c3aed;
+    --primary-700: #6d28d9;
+    --accent: #ec4899;
+    --accent-600: #db2777;
+    --muted: #64748b;
+}
+
+/* Respect system preference for dark mode */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        --surface: rgba(30, 41, 59, 0.8);
+        --primary: #60a5fa;
+        --primary-600: #3b82f6;
+        --primary-700: #2563eb;
+        --accent: #34d399;
+        --accent-600: #10b981;
+        --muted: #94a3b8;
+        --text: #e6eef8;
+        --border: rgba(148, 163, 184, 0.1);
+        --glass: rgba(30, 41, 59, 0.8);
+    }
+}
+
+/* Allow manual dark mode via a .dark-mode class on the root element */
+.dark-mode {
+    --bg: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    --surface: #1e293b;
+    --primary: #60a5fa;
+    --primary-600: #3b82f6;
+    --primary-700: #2563eb;
+    --accent: #34d399;
+    --accent-600: #10b981;
+    --muted: #94a3b8;
+    --text: #e6eef8;
+    --border: rgba(148, 163, 184, 0.1);
+    --glass: rgba(30, 41, 59, 0.9);
+}
+
+/* Dark mode specific overrides */
+.dark-mode body {
+    background: var(--bg);
+    color: var(--text);
+}
+
+.dark-mode .bg-white {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+}
+
+.dark-mode .bg-gray-50 {
+    background: linear-gradient(135deg, 
+        rgba(30, 41, 59, 0.8) 0%, 
+        rgba(15, 23, 42, 0.6) 100%) !important;
+}
+
+.dark-mode .text-gray-900 {
+    color: var(--text) !important;
+}
+
+.dark-mode .text-gray-800 {
+    color: color-mix(in srgb, var(--text) 90%, white 10%) !important;
+}
+
+.dark-mode .text-gray-700 {
+    color: color-mix(in srgb, var(--text) 80%, white 20%) !important;
+}
+
+.dark-mode .text-gray-600 {
+    color: var(--muted) !important;
+}
+
+.dark-mode .text-gray-500 {
+    color: color-mix(in srgb, var(--muted) 80%, white 20%) !important;
+}
+
+.dark-mode .text-gray-400 {
+    color: color-mix(in srgb, var(--muted) 60%, white 40%) !important;
+}
+
+.dark-mode .border-gray-300,
+.dark-mode .border {
+    border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+.dark-mode .border-gray-200 {
+    border-color: rgba(148, 163, 184, 0.15) !important;
+}
+
+/* Dark mode card styles */
+.dark-mode .card-premium {
+    background: var(--surface);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+.dark-mode .glass-card {
+    background: var(--glass);
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+}
+
+/* Dark mode form elements */
+.dark-mode input,
+.dark-mode select,
+.dark-mode textarea {
+    background: var(--surface) !important;
+    color: var(--text) !important;
+    border-color: rgba(148, 163, 184, 0.2) !important;
+}
+
+.dark-mode input:focus,
+.dark-mode select:focus,
+.dark-mode textarea:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1) !important;
+}
+
+/* Dark mode section backgrounds */
+.dark-mode .section-premium {
+    background: linear-gradient(135deg, 
+        rgba(30, 41, 59, 0.9) 0%, 
+        rgba(15, 23, 42, 0.8) 100%);
+}
+
+.dark-mode .section-premium::before {
+    background: radial-gradient(circle at 20% 80%, rgba(96, 165, 250, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(52, 211, 153, 0.05) 0%, transparent 50%);
+}
+
+/* Dark mode hero section */
+.dark-mode .hero-section::before {
+    background: linear-gradient(135deg, 
+        rgba(30, 41, 59, 0.9) 0%, 
+        rgba(15, 23, 42, 0.8) 50%, 
+        rgba(30, 41, 59, 0.7) 100%);
+}
+
+/* Apply variables to body/background and base text color */
+body {
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* Premium Glass Morphism Effects */
+.glass-card {
+    background: var(--glass);
+    backdrop-filter: var(--blur-backdrop);
+    -webkit-backdrop-filter: var(--blur-backdrop);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-xl);
+}
+
+.glass-header {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+}
+
+.dark-mode .glass-header {
+    background: rgba(30, 41, 59, 0.95);
+}
+
+/* Premium Button Styles */
+.btn-premium {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-600) 100%);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.025em;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+}
+
+.btn-premium:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.4);
+}
+
+.btn-premium:active {
+    transform: translateY(0);
+}
+
+.btn-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-premium:hover::before {
+    left: 100%;
+}
+
+/* Premium Card Styles */
+.card-premium {
+    background: var(--surface);
+    border-radius: 20px;
+    padding: 32px;
+    box-shadow: var(--shadow-2xl);
+    border: 1px solid var(--border);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.card-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-premium:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 32px 64px -12px rgba(0, 0, 0, 0.15);
+}
+
+.card-premium:hover::before {
+    opacity: 1;
+}
+
+/* Premium Typography */
+.heading-premium {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+/* Premium Animations */
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+    50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6); }
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Premium Gradients */
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.gradient-border {
+    position: relative;
+    background: var(--surface);
+    border-radius: 16px;
+}
+
+.gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+}
+
+.poppins-thin {
+    font-family: "Poppins", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.poppins-extralight {
+    font-family: "Poppins", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.poppins-light {
+    font-family: "Poppins", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.poppins-regular {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.poppins-medium {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.poppins-semibold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.poppins-bold {
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.hero-section {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(16, 185, 129, 0.1) 100%);
+}
+
+.hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.9) 0%, 
+        rgba(248, 250, 252, 0.8) 50%, 
+        rgba(241, 245, 249, 0.7) 100%);
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* Premium Section Backgrounds */
+.section-premium {
+    position: relative;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.9) 0%, 
+        rgba(248, 250, 252, 0.8) 100%);
+}
+
+.section-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+/* Utility overrides: map common Tailwind classes to CSS variables so the whole site follows palettes */
+/* These are intentionally broad — they replace visual tokens with semantic variables. */
+
+/* Backgrounds */
+.bg-white { 
+    background: var(--surface) !important; 
+    box-shadow: var(--shadow-sm);
+}
+.bg-gray-50 { 
+    background: linear-gradient(135deg, 
+        rgba(248, 250, 252, 0.8) 0%, 
+        rgba(241, 245, 249, 0.6) 100%) !important; 
+}
+.bg-transparent { background-color: transparent !important; }
+
+/* Text colors */
+.text-gray-900 { color: var(--text) !important; }
+.text-gray-800 { color: color-mix(in srgb, var(--text) 85%, black 15%) !important; }
+.text-gray-700 { color: color-mix(in srgb, var(--text) 70%, black 30%) !important; }
+.text-gray-600 { color: var(--muted) !important; }
+.text-gray-500 { color: color-mix(in srgb, var(--muted) 80%, black 20%) !important; }
+
+/* Borders */
+.border-gray-300 { border-color: var(--border) !important; }
+.border { border-color: var(--border) !important; }
+
+/* Button / primary usage */
+.text-primary { color: var(--primary) !important; }
+.bg-primary { 
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-600) 100%) !important;
+    box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.3);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.bg-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.4);
+}
+.hover\:bg-gray-50:hover { 
+    background: linear-gradient(135deg, 
+        rgba(248, 250, 252, 0.9) 0%, 
+        rgba(241, 245, 249, 0.7) 100%) !important; 
+}
+
+/* Card helpers */
+.card-surface { 
+    background: var(--surface); 
+    color: var(--text); 
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-surface:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-2xl);
+}
+
+/* Footer/link muted */
+.text-gray-400 { color: color-mix(in srgb, var(--muted) 70%, var(--text) 30%) !important; }
+
+/* Premium Input Styles */
+input, select, textarea {
+    border-radius: 12px !important;
+    border: 2px solid var(--border) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    background: var(--surface) !important;
+}
+
+input:focus, select:focus, textarea:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+    outline: none !important;
+}
+
+/* Premium Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, var(--primary-600) 0%, var(--accent-600) 100%);
+}
+
+/* Mobile Responsive Enhancements */
+@media (max-width: 768px) {
+    .card-premium {
+        padding: 20px;
+        border-radius: 16px;
+    }
+    
+    .btn-premium {
+        padding: 10px 20px;
+        font-size: 13px;
+    }
+}

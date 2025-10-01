@@ -1,0 +1,9 @@
+/* Billing Dashboard Styles */
+.billing-card {
+    transition: all 0.3s ease;
+}
+
+.billing-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

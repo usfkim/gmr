@@ -1,0 +1,17 @@
+/* Policy Engine Styles */
+.policy-card {
+    transition: all 0.3s ease;
+}
+
+.policy-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.parameter-grid {
+    transition: all 0.3s ease;
+}
+
+.policy-timeline {
+    transition: all 0.3s ease;
+}

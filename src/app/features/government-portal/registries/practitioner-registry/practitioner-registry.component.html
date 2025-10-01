@@ -1,0 +1,288 @@
+<!-- Practitioner Registry Management -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Registry Header -->
+    <section class="bg-gradient-to-r from-indigo-600 to-purple-700 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-white mb-1">Practitioner Registry</h1>
+                    <p class="text-indigo-100">Manage healthcare practitioner registrations and licenses</p>
+                    <p class="text-indigo-200 text-sm mt-1" *ngIf="currentUser">
+                        Logged in as: {{ currentUser.email }} ({{ currentUser.role }})
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                    <button (click)="exportData()" 
+                            class="bg-white text-indigo-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
+                        <i class="ri-download-line mr-2"></i>
+                        Export Registry
+                    </button>
+                    <button (click)="logout()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium text-sm">
+                        <i class="ri-logout-box-line mr-2"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Search and Filters -->
+    <section class="py-6 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <!-- Search Bar -->
+                <div class="flex flex-col md:flex-row gap-4 mb-4">
+                    <div class="flex-1">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="ri-search-line text-gray-400"></i>
+                            </div>
+                            <input type="text" 
+                                   [(ngModel)]="searchTerm"
+                                   (input)="onSearchChange()"
+                                   placeholder="Search by name, license number, or email..."
+                                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                        </div>
+                    </div>
+                    <button (click)="toggleFilters()" 
+                            class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
+                        <i class="ri-filter-line mr-2"></i>
+                        {{ showFilters ? 'Hide' : 'Show' }} Filters
+                    </button>
+                </div>
+                
+                <!-- Advanced Filters -->
+                <div *ngIf="showFilters" class="grid md:grid-cols-4 gap-4 pt-4 border-t border-gray-200">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select (change)="onStatusChange($any($event.target).value)" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Statuses</option>
+                            <option value="active">Active</option>
+                            <option value="suspended">Suspended</option>
+                            <option value="revoked">Revoked</option>
+                            <option value="expired">Expired</option>
+                            <option value="provisional">Provisional</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Profession</label>
+                        <select (change)="onProfessionChange($any($event.target).value)" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Professions</option>
+                            <option value="Medical Doctor">Medical Doctor</option>
+                            <option value="Nurse">Nurse</option>
+                            <option value="Midwife">Midwife</option>
+                            <option value="Pharmacist">Pharmacist</option>
+                            <option value="Dentist">Dentist</option>
+                            <option value="Traditional Medicine">Traditional Medicine</option>
+                            <option value="Allied Health">Allied Health</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Region</label>
+                        <select (change)="onRegionChange($any($event.target).value)" 
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Regions</option>
+                            <option value="Central">Central</option>
+                            <option value="Western">Western</option>
+                            <option value="Eastern">Eastern</option>
+                            <option value="Northern">Northern</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-end">
+                        <button (click)="applyFilters()" 
+                                class="w-full bg-secondary text-white px-4 py-2 rounded-lg hover:bg-green-600 transition font-medium">
+                            <i class="ri-refresh-line mr-2"></i>
+                            Reset Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Registry Results -->
+    <section class="py-6">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-sm">
+                <!-- Results Header -->
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            Registry Results ({{ filteredPractitioners.length }} practitioners)
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-600">Sort by:</span>
+                            <select class="border border-gray-300 rounded px-3 py-1 text-sm">
+                                <option>Name (A-Z)</option>
+                                <option>Registration Date</option>
+                                <option>Risk Score</option>
+                                <option>Status</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Practitioners Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Practitioner
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    License & Status
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Profession & Facility
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    KYC & Risk
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    CPD Progress
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr *ngFor="let practitioner of filteredPractitioners" 
+                                class="hover:bg-gray-50 transition-colors">
+                                <!-- Practitioner Info -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 mr-4">
+                                            <img *ngIf="practitioner.photo" 
+                                                 [src]="practitioner.photo" 
+                                                 [alt]="practitioner.name"
+                                                 class="w-full h-full object-cover">
+                                            <div *ngIf="!practitioner.photo" 
+                                                 class="w-full h-full flex items-center justify-center">
+                                                <i class="ri-user-line text-gray-400"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900">{{ practitioner.name }}</div>
+                                            <div class="text-sm text-gray-500">{{ practitioner.email }}</div>
+                                            <div class="text-xs text-gray-400">{{ practitioner.phone }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <!-- License & Status -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ practitioner.licenseNumber }}</div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                          [ngClass]="getStatusColor(practitioner.status)">
+                                        {{ practitioner.status | titlecase }}
+                                    </span>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        Expires: {{ practitioner.expiryDate | date:'mediumDate' }}
+                                    </div>
+                                </td>
+                                
+                                <!-- Profession & Facility -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ practitioner.profession }}</div>
+                                    <div class="text-sm text-gray-500">{{ practitioner.specialty }}</div>
+                                    <div class="text-xs text-gray-400">{{ practitioner.facility }}</div>
+                                    <div class="text-xs text-gray-400">{{ practitioner.region }}, {{ practitioner.district }}</div>
+                                </td>
+                                
+                                <!-- KYC & Risk -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                          [ngClass]="getKycStatusColor(practitioner.kycStatus)">
+                                        KYC: {{ practitioner.kycStatus | titlecase }}
+                                    </span>
+                                    <div class="text-sm mt-1" [ngClass]="getRiskColor(practitioner.riskScore)">
+                                        Risk Score: {{ practitioner.riskScore }}/10
+                                    </div>
+                                </td>
+                                
+                                <!-- CPD Progress -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{{ practitioner.cpdCredits }}/{{ practitioner.requiredCredits }}</div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                        <div class="bg-blue-500 h-2 rounded-full" 
+                                             [style.width.%]="(practitioner.cpdCredits / practitioner.requiredCredits) * 100"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        {{ ((practitioner.cpdCredits / practitioner.requiredCredits) * 100).toFixed(1) }}% Complete
+                                    </div>
+                                </td>
+                                
+                                <!-- Actions -->
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button (click)="viewPractitioner(practitioner.id)" 
+                                                class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition">
+                                            <i class="ri-eye-line mr-1"></i>View
+                                        </button>
+                                        
+                                        <button *ngIf="practitioner.status === 'pending'" 
+                                                (click)="approvePractitioner(practitioner.id)"
+                                                class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600 transition">
+                                            <i class="ri-check-line mr-1"></i>Approve
+                                        </button>
+                                        
+                                        <button *ngIf="practitioner.status === 'pending'" 
+                                                (click)="rejectPractitioner(practitioner.id)"
+                                                class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition">
+                                            <i class="ri-close-line mr-1"></i>Reject
+                                        </button>
+                                        
+                                        <button *ngIf="practitioner.status === 'active'" 
+                                                (click)="suspendPractitioner(practitioner.id)"
+                                                class="bg-orange-500 text-white px-3 py-1 rounded text-xs hover:bg-orange-600 transition">
+                                            <i class="ri-pause-line mr-1"></i>Suspend
+                                        </button>
+                                        
+                                        <button *ngIf="practitioner.status === 'active' || practitioner.status === 'suspended'" 
+                                                (click)="revokeLicense(practitioner.id)"
+                                                class="bg-red-600 text-white px-3 py-1 rounded text-xs hover:bg-red-700 transition">
+                                            <i class="ri-delete-bin-line mr-1"></i>Revoke
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="px-6 py-4 border-t border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-700">
+                            Showing {{ filteredPractitioners.length }} of {{ practitioners.length }} practitioners
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">
+                                Previous
+                            </button>
+                            <span class="px-3 py-1 bg-primary text-white rounded text-sm">1</span>
+                            <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

@@ -1,0 +1,120 @@
+/* Document Vault Styles */
+.document-card {
+    transition: all 0.3s ease;
+}
+
+.document-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.category-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.category-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    border-color: var(--primary);
+}
+
+.upload-zone {
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover {
+    border-color: var(--primary);
+    background-color: rgba(147, 51, 234, 0.02);
+}
+
+.upload-zone.dragover {
+    border-color: var(--primary);
+    background-color: rgba(147, 51, 234, 0.05);
+    transform: scale(1.02);
+}
+
+.document-tag {
+    transition: all 0.3s ease;
+}
+
+.document-tag:hover {
+    transform: scale(1.05);
+    background-color: var(--primary);
+    color: white;
+}
+
+.action-button {
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.expiry-warning {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.upload-progress {
+    animation: pulse 1s infinite;
+}
+
+/* Status indicators */
+.status-verified {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-rejected {
+    background-color: #fecaca;
+    color: #991b1b;
+}
+
+.status-expired {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+/* File type icons */
+.file-pdf {
+    color: #dc2626;
+}
+
+.file-doc {
+    color: #2563eb;
+}
+
+.file-image {
+    color: #059669;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .document-card {
+        margin-bottom: 16px;
+    }
+    
+    .category-card {
+        padding: 16px;
+    }
+    
+    .upload-zone {
+        padding: 24px 16px;
+    }
+}

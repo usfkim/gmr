@@ -1,0 +1,160 @@
+<div>
+    <div class="min-h-screen flex flex-col">
+        <header class="bg-white py-4 px-6 shadow-sm">
+            <div class="container mx-auto flex items-center justify-between">
+                <a routerLink="/login" class="flex items-center text-gray-600 hover:text-primary transition">
+                    <i class="ri-arrow-left-line mr-2"></i>
+                    <span>Back to Login</span>
+                </a>
+                <div class="w-[220px] h-[40px] mr-10 relative overflow-hidden cursor-pointer" routerLink="/">
+                    <img src="logo.png" class="absolute -top-[98px]" />
+                </div>
+            </div>
+        </header>
+        <main class="flex-grow flex items-center justify-center py-12 px-4">
+            <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-3xl border">
+                <div class="text-center mb-8">
+                    <h1 class="text-2xl font-bold text-gray-900 mb-2">Practitioner Registration</h1>
+                    <p class="text-gray-600">Create your account to register as a healthcare practitioner</p>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+                        <div class="flex items-start">
+                            <i class="ri-information-line text-blue-600 ri-lg mt-0.5 mr-3"></i>
+                            <div class="text-left">
+                                <h3 class="font-medium text-blue-900 mb-1">Registration Process</h3>
+                                <ol class="text-sm text-blue-700 space-y-1">
+                                    <li>1. Create your account with basic information</li>
+                                    <li>2. Upload required documents and credentials</li>
+                                    <li>3. Pay registration/renewal fee</li>
+                                    <li>4. Wait for approval from regulatory body</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form [formGroup]="form" class="gap-6 grid grid-cols-2 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                        <sc-input formControlName="firstName"/>
+                        
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                        <sc-input formControlName="lastName"/>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <sc-input formControlName="lastName"/>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Phone number</label>
+                        <sc-phone-input [disableCountrySelection]="true" formControlName="phoneNumber" dataType="NumberOnly" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Date Of Birth</label>
+                        <sc-date-picker formControlName="dateOfBirth"/>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                        <sc-select [allowClear]="true" formControlName="gender">
+                            <sc-select-option value="Male" label="Male" />
+                            <sc-select-option value="Female" label="Female" />
+                        </sc-select>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Regulatory Body</label>
+                        <sc-select [allowClear]="true" formControlName="gender">
+                            <sc-select-option value="Male" label="Male" />
+                            <sc-select-option value="Female" label="Female" />
+                        </sc-select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Practitioner Type</label>
+                        <sc-select [allowClear]="true" formControlName="gender">
+                            <sc-select-option value="Male" label="Male" />
+                            <sc-select-option value="Female" label="Female" />
+                        </sc-select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Your Specialty</label>
+                        <sc-select [allowClear]="true" formControlName="gender">
+                            <sc-select-option value="Male" label="Male" />
+                            <sc-select-option value="Female" label="Female" />
+                        </sc-select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Region</label>
+                        <sc-select [allowClear]="true" formControlName="gender">
+                            <sc-select-option value="Male" label="Male" />
+                            <sc-select-option value="Female" label="Female" />
+                        </sc-select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">District</label>
+                        <sc-select [allowClear]="true" formControlName="gender">
+                            <sc-select-option value="Male" label="Male" />
+                            <sc-select-option value="Female" label="Female" />
+                        </sc-select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Ghana Card Number</label>
+                            <sc-input formControlName="idNumber"/>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Digital Address</label>
+                        <sc-input formControlName="digitalAddress"/>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Residential Address</label>
+                        <sc-textarea-input formControlName="residentialAddress"/>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <sc-input [suffixTemplate]="visiIcon" formControlName="password"
+                            [type]="passwordVisible ? 'text' : 'password'" />
+                        <ng-template #visiIcon>
+                            <i class="cursor-pointer" (click)="showPassword()"
+                                [ngClass]="{'ri-eye-line': passwordVisible,'ri-eye-off-line': !passwordVisible}"></i>
+                        </ng-template>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
+                        <sc-input [suffixTemplate]="visiIcon" formControlName="confirmPassword"
+                            [type]="passwordVisible ? 'text' : 'password'" />
+                        <ng-template #visiIcon>
+                            <i class="cursor-pointer" (click)="showPassword()"
+                                [ngClass]="{'ri-eye-line': passwordVisible,'ri-eye-off-line': !passwordVisible}"></i>
+                        </ng-template>
+                    </div>
+                </form>
+                <div class="flex items-start mb-6">
+                    <sc-check-box />
+                    <span class=" text-sm text-gray-700">I agree to the <a href="#"
+                            class="text-primary hover:underline">Terms of Service</a> and <a href="#"
+                            class="text-primary hover:underline">Privacy Policy</a></span>
+                </div>
+                <button
+                    class="w-full bg-blue-500 text-white py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition font-medium">Create
+                    Account
+                </button>
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600">
+                        Already have an account?
+                        <a routerLink="/register" class="text-blue-500 font-medium hover:underline">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </main>
+        <footer class="bg-white py-6 border-t">
+            <div class="container mx-auto px-4 text-center">
+                <p class="text-gray-600 text-sm">© 2025 Uganda Medical Registry. All Rights Reserved.</p>
+                <div class="flex justify-center space-x-4 mt-3">
+                    <a href="#" class="text-gray-500 hover:text-gray-700 text-sm">Privacy Policy</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="#" class="text-gray-500 hover:text-gray-700 text-sm">Terms of Use</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="#" class="text-gray-500 hover:text-gray-700 text-sm">Help Center</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>

@@ -1,0 +1,55 @@
+/* Facility Registry Styles */
+.facility-card {
+    transition: all 0.3s ease;
+}
+
+.facility-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.service-tag {
+    transition: all 0.3s ease;
+}
+
+.service-tag:hover {
+    transform: scale(1.05);
+}
+
+.accreditation-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+.violation-alert {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.action-button {
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .facility-card {
+        margin-bottom: 16px;
+    }
+    
+    .action-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,827 @@
+<div class="bg-white">
+    <!-- Header Navigation -->
+   <app-header/>
+    <!-- Hero Section -->
+    <section class="bg-gray-50 py-10">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Search Healthcare Practitioners</h1>
+                <p class="text-lg text-gray-600 mb-8">Verify the credentials and licensing status of healthcare
+                    professionals registered in the Uganda Medical Registry</p>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb -->
+    <div class="bg-white py-3 border-b">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center text-sm text-gray-600">
+                <a routerLink="/home"
+                    data-readdy="true" class="hover:text-primary transition">Home</a>
+                <i class="ri-arrow-right-s-line mx-2"></i>
+                <span class="text-gray-800 font-medium">Search Practitioners</span>
+            </div>
+        </div>
+    </div>
+    <!-- Search Form Section -->
+    <section class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto bg-white rounded-lg shadow-md p-6 md:p-8">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-6">Find a Healthcare Professional</h2>
+                <form id="searchForm">
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Practitioner
+                                Name</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="ri-user-line text-gray-400"></i>
+                                </div>
+                                <input type="text" id="name" name="name"
+                                    class="search-input block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm"
+                                    placeholder="Enter full name or partial name">
+                            </div>
+                        </div>
+                        <div>
+                            <label for="specialty"
+                                class="block text-sm font-medium text-gray-700 mb-2">Specialty</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="ri-stethoscope-line text-gray-400"></i>
+                                </div>
+                                <select id="specialty" name="specialty"
+                                    class="search-input custom-select block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm">
+                                    <option value="">All Specialties</option>
+                                    <option value="general-medicine">General Medicine</option>
+                                    <option value="pediatrics">Pediatrics</option>
+                                    <option value="obstetrics-gynecology">Obstetrics & Gynecology</option>
+                                    <option value="surgery">Surgery</option>
+                                    <option value="cardiology">Cardiology</option>
+                                    <option value="orthopedics">Orthopedics</option>
+                                    <option value="neurology">Neurology</option>
+                                    <option value="psychiatry">Psychiatry</option>
+                                    <option value="dermatology">Dermatology</option>
+                                    <option value="ophthalmology">Ophthalmology</option>
+                                    <option value="traditional-medicine">Traditional Medicine</option>
+                                    <option value="physiotherapy">Physiotherapy</option>
+                                    <option value="dental">Dental</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label for="location"
+                                class="block text-sm font-medium text-gray-700 mb-2">Location/Region</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="ri-map-pin-line text-gray-400"></i>
+                                </div>
+                                <select id="location" name="location"
+                                    class="search-input custom-select block w-full pl-10 pr-10 py-2.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm">
+                                    <option value="">All Regions</option>
+                                    <option value="kampala">Kampala</option>
+                                    <option value="central">Central</option>
+                                    <option value="eastern">Eastern</option>
+                                    <option value="western">Western</option>
+                                    <option value="northern">Northern</option>
+                                    <option value="north">Northern Region</option>
+                                    <option value="western-region">Western Region</option>
+                                    <option value="western-uganda">Western Uganda</option>
+                                    <option value="eastern-region">Eastern Region</option>
+                                    <option value="central-region">Central Region</option>
+                                    <option value="north-buganda">Northern (Buganda)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="license" class="block text-sm font-medium text-gray-700 mb-2">License
+                                Number</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="ri-file-list-3-line text-gray-400"></i>
+                                </div>
+                                <input type="text" id="license" name="license"
+                                    class="search-input block w-full pl-10 pr-3 py-2.5 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm"
+                                    placeholder="Enter license number">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="text-sm font-medium text-gray-700">Advanced Filters</h3>
+                            <button type="button" id="toggleFilters"
+                                class="text-primary text-sm font-medium flex items-center">
+                                <span id="filterText">Show Filters</span>
+                                <i class="ri-arrow-down-s-line ml-1" id="filterIcon"></i>
+                            </button>
+                        </div>
+                        <div id="advancedFilters" class="hidden bg-gray-50 p-4 rounded-md">
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700 mb-3">Practitioner Type</h4>
+                                    <div class="space-y-2">
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="type" value="medical-doctor">
+                                            <span class="checkmark"></span>
+                                            Medical Doctor
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="type" value="dentist">
+                                            <span class="checkmark"></span>
+                                            Dentist
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="type" value="nurse">
+                                            <span class="checkmark"></span>
+                                            Nurse
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="type" value="midwife">
+                                            <span class="checkmark"></span>
+                                            Midwife
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="type" value="traditional-practitioner">
+                                            <span class="checkmark"></span>
+                                            Traditional Practitioner
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="type" value="allied-health">
+                                            <span class="checkmark"></span>
+                                            Allied Health Professional
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700 mb-3">License Status</h4>
+                                    <div class="space-y-2">
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="status" value="active" checked>
+                                            <span class="checkmark"></span>
+                                            Active
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="status" value="provisional">
+                                            <span class="checkmark"></span>
+                                            Provisional
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="status" value="suspended">
+                                            <span class="checkmark"></span>
+                                            Suspended
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="status" value="expired">
+                                            <span class="checkmark"></span>
+                                            Expired
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700 mb-3">Additional Filters</h4>
+                                    <div class="space-y-2">
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="verified" value="1" checked>
+                                            <span class="checkmark"></span>
+                                            Verified Practitioners Only
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="accepting" value="1">
+                                            <span class="checkmark"></span>
+                                            Currently Accepting Patients
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="telemedicine" value="1">
+                                            <span class="checkmark"></span>
+                                            Offers Telemedicine
+                                        </label>
+                                        <label class="custom-checkbox flex items-center text-sm text-gray-600">
+                                            <input type="checkbox" name="nhis" value="1">
+                                            <span class="checkmark"></span>
+                                            Accepts NHIS
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row sm:justify-between">
+                        <button type="submit"
+                            class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition font-medium flex items-center justify-center mb-3 sm:mb-0">
+                            <i class="ri-search-line mr-2"></i>
+                            Search Practitioners
+                        </button>
+                        <button type="reset"
+                            class="text-gray-600 px-6 py-3 border border-gray-300 !rounded-button whitespace-nowrap hover:bg-gray-50 transition font-medium flex items-center justify-center">
+                            <i class="ri-refresh-line mr-2"></i>
+                            Clear Filters
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- Search Results Section -->
+    <section class="py-8 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Search Results</h2>
+                        <p class="text-gray-600"><span id="resultCount">24</span> practitioners found</p>
+                    </div>
+                    <div class="flex items-center mt-4 md:mt-0">
+                        <label for="sortBy" class="text-sm font-medium text-gray-700 mr-2">Sort by:</label>
+                        <select id="sortBy"
+                            class="custom-select border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm pr-8 py-2">
+                            <option value="relevance">Relevance</option>
+                            <option value="name-asc">Name (A-Z)</option>
+                            <option value="name-desc">Name (Z-A)</option>
+                            <option value="location">Location</option>
+                            <option value="specialty">Specialty</option>
+                            <option value="verification">Verification Status</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="search-results-container grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Practitioner Card 1 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-verified-badge-fill mr-1 text-green-600"></i>
+                            Verified
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-primary">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520male%2520doctor%2520in%2520formal%2520attire%2520with%2520stethoscope%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520medical%2520doctor%252C%2520serious%2520expression&width=200&height=200&seq=doc1&orientation=squarish"
+                                        alt="Dr. Yusuf AbdulHakim" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Dr. Yusuf AbdulHakim</h3>
+                                    <p class="text-primary font-medium">Cardiologist</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Central Region (Kampala)</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>Mulago National Referral Hospital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: UMC-UG-2458</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Practitioner Card 2 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-verified-badge-fill mr-1 text-green-600"></i>
+                            Verified
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-primary">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520female%2520doctor%2520in%2520formal%2520attire%2520with%2520stethoscope%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520female%2520medical%2520doctor%252C%2520warm%2520smile&width=200&height=200&seq=doc2&orientation=squarish"
+                                        alt="Dr. Amjad Musisi" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Dr. Amjad Musisi</h3>
+                                    <p class="text-primary font-medium">Pediatrician</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Central Region (Kampala)</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>37 Military Hospital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: UMC-UG-3126</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Practitioner Card 3 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-verified-badge-fill mr-1 text-green-600"></i>
+                            Verified
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-primary">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520male%2520doctor%2520in%2520formal%2520attire%2520with%2520stethoscope%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520medical%2520doctor%252C%2520glasses%252C%2520thoughtful%2520expression&width=200&height=200&seq=doc3&orientation=squarish"
+                                        alt="Dr. Kofi Mensah" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Dr. Kofi Mensah</h3>
+                                    <p class="text-primary font-medium">Orthopedic Surgeon</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Ashanti Region</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>Komfo Anokye Teaching Hospital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: UMC-UG-2871</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Practitioner Card 4 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-verified-badge-fill mr-1 text-green-600"></i>
+                            Verified
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-primary">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520female%2520doctor%2520in%2520formal%2520attire%2520with%2520stethoscope%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520female%2520medical%2520doctor%252C%2520professional%2520expression&width=200&height=200&seq=doc4&orientation=squarish"
+                                        alt="Dr. Gifty Ayew" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Dr. Gifty Ayew</h3>
+                                    <p class="text-primary font-medium">Obstetrician & Gynecologist</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Greater Accra Region</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>Ridge Hospital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: UMC-UG-3052</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Practitioner Card 5 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-time-line mr-1 text-yellow-600"></i>
+                            Provisional
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-gray-300">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520male%2520in%2520traditional%2520attire%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520traditional%2520medicine%2520practitioner%252C%2520wise%2520expression&width=200&height=200&seq=doc5&orientation=squarish"
+                                        alt="Nana Kwesi Amankwah" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Nana Kwesi Amankwah</h3>
+                                    <p class="text-primary font-medium">Traditional Medicine Practitioner</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Central Region</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>Herbal Medicine Unit, Cape Coast</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: TMPC-UG-0842</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                            Provisional
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Practitioner Card 6 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-verified-badge-fill mr-1 text-green-600"></i>
+                            Verified
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-primary">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520female%2520in%2520nursing%2520uniform%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520female%2520nurse%252C%2520caring%2520expression&width=200&height=200&seq=doc6&orientation=squarish"
+                                        alt="Nurse Akandwanaho Richard" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Nurse Akandwanaho Richard</h3>
+                                    <p class="text-primary font-medium">Registered Nurse</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Eastern Region</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>Koforidua Regional Hospital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: NMC-UG-5721</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Practitioner Card 7 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-verified-badge-fill mr-1 text-green-600"></i>
+                            Verified
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-primary">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520male%2520doctor%2520in%2520formal%2520attire%2520with%2520stethoscope%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520medical%2520doctor%252C%2520friendly%2520expression&width=200&height=200&seq=doc7&orientation=squarish"
+                                        alt="Dr. Benjamin Asamoah" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Dr. Benjamin Asamoah</h3>
+                                    <p class="text-primary font-medium">Psychiatrist</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Greater Accra Region</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>Accra Psychiatric Hospital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: UMC-UG-2964</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Practitioner Card 8 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-error-warning-line mr-1 text-red-600"></i>
+                            Expired
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-gray-300">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520female%2520doctor%2520in%2520formal%2520attire%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520female%2520dentist%252C%2520friendly%2520smile&width=200&height=200&seq=doc8&orientation=squarish"
+                                        alt="Dr. Felicia Boateng" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Dr. Felicia Boateng</h3>
+                                    <p class="text-primary font-medium">Dentist</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Western Region</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>Effia Nkwanta Regional Hospital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: UMC-UG-3214</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            Expired
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Practitioner Card 9 -->
+                    <div
+                        class="practitioner-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                        <div
+                            class="verification-badge bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium flex items-center">
+                            <i class="ri-verified-badge-fill mr-1 text-green-600"></i>
+                            Verified
+                        </div>
+                        <div class="p-4">
+                            <div class="flex items-start">
+                                <div
+                                    class="w-20 h-20 rounded-full overflow-hidden flex-shrink-0 bg-gray-200 border-2 border-primary">
+                                    <img src="https://readdy.ai/api/search-image?query=professional%2520portrait%2520of%2520African%2520male%2520in%2520medical%2520uniform%252C%2520confident%2520pose%252C%2520neutral%2520background%252C%2520well-groomed%252C%2520professional%2520lighting%252C%2520high%2520quality%2520professional%2520headshot%2520of%2520Ugandan%2520male%2520physiotherapist%252C%2520friendly%2520expression&width=200&height=200&seq=doc9&orientation=squarish"
+                                        alt="Michael Owusu" class="w-full h-full object-cover object-top">
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-lg font-semibold text-gray-800">Michael Owusu</h3>
+                                    <p class="text-primary font-medium">Physiotherapist</p>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-map-pin-line mr-1"></i>
+                                        <span>Greater Accra Region</span>
+                                    </div>
+                                    <div class="flex items-center mt-1 text-sm text-gray-600">
+                                        <i class="ri-hospital-line mr-1"></i>
+                                        <span>Trust Hospital</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-4 border-t border-gray-100">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center text-sm text-gray-600">
+                                        <i class="ri-file-list-3-line mr-1"></i>
+                                        <span>License: AHPC-UG-4217</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                            Active
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#"
+                                    class="block w-full bg-white text-primary border border-primary text-center px-4 py-2 !rounded-button whitespace-nowrap hover:bg-primary hover:text-white transition font-medium mt-2">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pagination -->
+                <div class="mt-10 flex justify-center">
+                    <nav class="inline-flex rounded-md shadow">
+                        <a href="#"
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-l-md hover:bg-gray-50">
+                            <i class="ri-arrow-left-s-line mr-1"></i>
+                            Previous
+                        </a>
+                        <a href="#"
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-primary border border-primary">1</a>
+                        <a href="#"
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50">2</a>
+                        <a href="#"
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50">3</a>
+                        <span
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300">...</span>
+                        <a href="#"
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 hover:bg-gray-50">8</a>
+                        <a href="#"
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-r-md hover:bg-gray-50">
+                            Next
+                            <i class="ri-arrow-right-s-line ml-1"></i>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Information Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Understanding License Status</h2>
+                        <div class="bg-gray-50 rounded-lg p-6">
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <span
+                                        class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-3 mt-0.5">Active</span>
+                                    <div>
+                                        <h3 class="text-base font-medium text-gray-800">Active License</h3>
+                                        <p class="text-sm text-gray-600">The practitioner's license is current and
+                                            valid. They are authorized to practice within their scope.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span
+                                        class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mr-3 mt-0.5">Provisional</span>
+                                    <div>
+                                        <h3 class="text-base font-medium text-gray-800">Provisional License</h3>
+                                        <p class="text-sm text-gray-600">The practitioner has a temporary license,
+                                            typically issued to new graduates or those completing requirements.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span
+                                        class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 mr-3 mt-0.5">Suspended</span>
+                                    <div>
+                                        <h3 class="text-base font-medium text-gray-800">Suspended License</h3>
+                                        <p class="text-sm text-gray-600">The practitioner's license has been temporarily
+                                            suspended. They are not authorized to practice.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span
+                                        class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 mr-3 mt-0.5">Expired</span>
+                                    <div>
+                                        <h3 class="text-base font-medium text-gray-800">Expired License</h3>
+                                        <p class="text-sm text-gray-600">The practitioner's license has expired and
+                                            needs renewal. They are not authorized to practice.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Verification Process</h2>
+                        <div class="bg-gray-50 rounded-lg p-6">
+
+                                <p class="text-gray-600 mb-4">The Uganda Medical Registry verifies practitioners through a
+                                rigorous process:</p>
+                            <ul class="space-y-3">
+                                <li class="flex items-start">
+                                    <div
+                                        class="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full mt-0.5 mr-3 flex-shrink-0">
+                                        <span class="text-xs font-bold">1</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Credential verification with issuing educational
+                                        institutions</p>
+                                </li>
+                                <li class="flex items-start">
+                                    <div
+                                        class="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full mt-0.5 mr-3 flex-shrink-0">
+                                        <span class="text-xs font-bold">2</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Confirmation of licensing with appropriate
+                                        regulatory bodies</p>
+                                </li>
+                                <li class="flex items-start">
+                                    <div
+                                        class="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full mt-0.5 mr-3 flex-shrink-0">
+                                        <span class="text-xs font-bold">3</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Background checks for disciplinary actions or
+                                        malpractice</p>
+                                </li>
+                                <li class="flex items-start">
+                                    <div
+                                        class="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full mt-0.5 mr-3 flex-shrink-0">
+                                        <span class="text-xs font-bold">4</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600">Regular updates to ensure current information</p>
+                                </li>
+                            </ul>
+                            <div class="mt-4 pt-4 border-t border-gray-200">
+                                <p class="text-sm text-gray-600 italic">If you have concerns about a practitioner's
+                                    credentials or license status, please <a href="#"
+                                        class="text-primary hover:underline">contact us</a> immediately.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Call to Action -->
+    <section class="py-12 bg-primary">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">Need Help Finding the Right Healthcare Professional?</h2>
+            <p class="text-lg text-white opacity-90 max-w-3xl mx-auto mb-8">Our verification portal provides additional
+                tools for healthcare institutions and employers</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a  routerLink="/verification-portal"
+                    data-readdy="true"
+                    class="bg-white text-primary px-6 py-3 !rounded-button whitespace-nowrap hover:bg-gray-100 transition font-medium">
+                    Access Verification Portal
+                </a>
+                <a href="#"
+                    class="bg-transparent text-white border border-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-white/10 transition font-medium">
+                    Contact Support
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+   <app-footer/>
+</div>

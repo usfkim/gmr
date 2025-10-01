@@ -1,0 +1,117 @@
+<div *ngIf="workflow" class="bg-white rounded-lg shadow-sm border p-6">
+  <!-- Workflow Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h3 class="text-lg font-semibold text-gray-800">{{ workflow.type | titlecase }} Workflow</h3>
+      <p class="text-sm text-gray-600">ID: {{ workflow.workflowId }}</p>
+    </div>
+    <div class="flex items-center">
+      <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+            [class]="getStatusColor() + ' text-white'">
+        <i [class]="getStatusIcon() + ' mr-2'"></i>
+        {{ workflow.status | titlecase }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Progress Bar -->
+  <div class="mb-6">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-sm font-medium text-gray-700">Progress</span>
+      <span class="text-sm text-gray-600">{{ workflow.completedSteps }}/{{ workflow.totalSteps }} steps</span>
+    </div>
+    <div class="w-full bg-gray-200 rounded-full h-2">
+      <div class="bg-blue-500 h-2 rounded-full transition-all duration-500" 
+           [style.width.%]="getProgressPercentage()"></div>
+    </div>
+  </div>
+
+  <!-- Current Step -->
+  <div class="mb-6">
+    <div class="flex items-center mb-2">
+      <i [class]="getStatusIcon() + ' mr-2 text-blue-600'"></i>
+      <span class="text-sm font-medium text-gray-700">Current Step:</span>
+    </div>
+    <p class="text-gray-800 ml-6">{{ workflow.currentStep | titlecase }}</p>
+  </div>
+
+  <!-- Step Details (if showDetails is true) -->
+  <div *ngIf="showDetails" class="mb-6">
+    <h4 class="text-sm font-medium text-gray-700 mb-3">Workflow Steps</h4>
+    <div class="space-y-3">
+      <div *ngFor="let step of getWorkflowSteps(); let i = index" 
+           class="flex items-center">
+        <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3"
+             [class]="i < workflow.completedSteps ? 'bg-green-100' : 
+                      i === workflow.completedSteps ? 'bg-blue-100' : 'bg-gray-100'">
+          <i [class]="getStepIcon(i)"></i>
+        </div>
+        <span class="text-sm"
+              [class]="i < workflow.completedSteps ? 'text-green-800 font-medium' : 
+                       i === workflow.completedSteps ? 'text-blue-800 font-medium' : 'text-gray-600'">
+          {{ step }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Estimated Completion -->
+  <div *ngIf="workflow.status === 'in_progress' || workflow.status === 'initiated'" 
+       class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+    <div class="flex items-center">
+      <i class="ri-time-line text-blue-600 mr-2"></i>
+      <div>
+        <p class="text-sm font-medium text-blue-800">Estimated Completion</p>
+        <p class="text-sm text-blue-600">{{ formatEstimatedCompletion() }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Error Information -->
+  <div *ngIf="workflow.status === 'failed'" 
+       class="bg-red-50 border border-red-200 rounded-lg p-4">
+    <div class="flex items-center">
+      <i class="ri-error-warning-line text-red-600 mr-2"></i>
+      <div>
+        <p class="text-sm font-medium text-red-800">Workflow Failed</p>
+        <p class="text-sm text-red-600">{{ workflow.metadata.failureReason || workflow.metadata.error }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Information -->
+  <div *ngIf="workflow.status === 'completed'" 
+       class="bg-green-50 border border-green-200 rounded-lg p-4">
+    <div class="flex items-center">
+      <i class="ri-check-line text-green-600 mr-2"></i>
+      <div>
+        <p class="text-sm font-medium text-green-800">Workflow Completed Successfully</p>
+        <p class="text-sm text-green-600">All steps completed on {{ workflow.lastUpdated | date:'medium' }}</p>
+        
+        <!-- Show license number if onboarding completed -->
+        <div *ngIf="workflow.type === 'onboarding' && workflow.metadata.licenseResult">
+          <p class="text-sm text-green-600 mt-2">
+            <strong>License Number:</strong> {{ workflow.metadata.licenseResult.licenseNumber }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Last Updated -->
+  <div class="mt-4 pt-4 border-t border-gray-200">
+    <p class="text-xs text-gray-500">
+      Last updated: {{ workflow.lastUpdated | date:'medium' }}
+    </p>
+  </div>
+</div>
+
+<!-- Loading State -->
+<div *ngIf="!workflow" class="bg-white rounded-lg shadow-sm border p-6">
+  <div class="flex items-center justify-center py-8">
+    <div class="text-center">
+      <i class="ri-loader-4-line animate-spin text-blue-600 text-2xl mb-2"></i>
+      <p class="text-gray-600">Loading workflow status...</p>
+    </div>
+  </div>
+</div>

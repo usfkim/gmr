@@ -1,0 +1,198 @@
+<!-- Embassy Batch Verification -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Batch Verification Header -->
+    <section class="bg-gradient-to-r from-green-600 to-emerald-700 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-white mb-1">Batch Verification</h1>
+                    <p class="text-green-100">Upload CSV files for bulk practitioner verification</p>
+                    <p class="text-green-200 text-sm mt-1" *ngIf="currentUser">
+                        Logged in as: {{ currentUser.email }}
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                    <a routerLink="/embassy" 
+                       class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Back to Dashboard
+                    </a>
+                    <button (click)="logout()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium text-sm">
+                        <i class="ri-logout-box-line mr-2"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Upload Section -->
+    <section class="py-8 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <!-- Upload Interface -->
+                <div class="bg-white rounded-lg shadow-sm p-8 mb-8">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">Upload Verification File</h2>
+                    
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <!-- Upload Zone -->
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-green-500 transition">
+                            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="ri-upload-cloud-line text-green-600 text-2xl"></i>
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-2">Upload CSV File</h3>
+                            <p class="text-sm text-gray-600 mb-4">
+                                Select a CSV file containing license numbers and applicant details
+                            </p>
+                            
+                            <div class="space-y-3">
+                                <input type="file" 
+                                       accept=".csv" 
+                                       (change)="onFileSelected($event)"
+                                       class="hidden" 
+                                       #fileInput>
+                                <button (click)="fileInput.click()" 
+                                        class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition font-medium">
+                                    <i class="ri-folder-open-line mr-2"></i>
+                                    Select CSV File
+                                </button>
+                                
+                                <div *ngIf="selectedFile" class="text-sm text-gray-600">
+                                    Selected: {{ selectedFile.name }}
+                                </div>
+                                
+                                <button *ngIf="selectedFile" 
+                                        (click)="uploadCSV()"
+                                        [disabled]="isUploading"
+                                        class="w-full bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition font-medium disabled:opacity-50">
+                                    <i class="ri-upload-line mr-2"></i>
+                                    Start Batch Verification
+                                </button>
+                                
+                                <!-- Upload Progress -->
+                                <div *ngIf="isUploading" class="mt-4">
+                                    <div class="w-full bg-gray-200 rounded-full h-3">
+                                        <div class="bg-green-500 h-3 rounded-full transition-all duration-300" 
+                                             [style.width.%]="uploadProgress"></div>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-2 text-center">Uploading... {{ uploadProgress }}%</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Template Download -->
+                        <div class="bg-blue-50 border border-blue-200 rounded-lg p-6">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
+                                    <i class="ri-file-excel-line text-blue-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">CSV Template</h3>
+                                    <p class="text-sm text-gray-600">Download the standard template</p>
+                                </div>
+                            </div>
+                            
+                            <button (click)="downloadTemplate()" 
+                                    class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition font-medium mb-4">
+                                <i class="ri-download-line mr-2"></i>
+                                Download Template
+                            </button>
+                            
+                            <!-- Template Preview -->
+                            <div class="bg-white rounded p-3 border border-blue-100">
+                                <h4 class="font-medium text-gray-800 mb-2 text-sm">Template Format:</h4>
+                                <div class="text-xs font-mono text-gray-600 space-y-1">
+                                    <div *ngFor="let line of csvTemplate">{{ line }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Batch Jobs History -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto">
+                <div class="bg-white rounded-lg shadow-sm">
+                    <div class="p-6 border-b border-gray-200">
+                        <h2 class="text-xl font-semibold text-gray-800">Batch Verification Jobs</h2>
+                    </div>
+                    
+                    <div class="divide-y divide-gray-200">
+                        <div *ngFor="let job of batchJobs" class="p-6">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-center">
+                                    <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-4">
+                                        <i class="ri-file-excel-line text-gray-600 text-xl"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">{{ job.fileName }}</h3>
+                                        <p class="text-sm text-gray-600">{{ job.id }}</p>
+                                        <div class="flex items-center mt-2">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                                  [ngClass]="getStatusColor(job.status)">
+                                                {{ job.status | titlecase }}
+                                            </span>
+                                            <span class="text-xs text-gray-500 ml-3">
+                                                Uploaded: {{ job.uploadDate | date:'medium' }}
+                                            </span>
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            by {{ job.uploadedBy }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Job Results -->
+                                <div class="text-right">
+                                    <div class="text-sm font-medium text-gray-800">
+                                        {{ formatNumber(job.processedRecords) }}/{{ formatNumber(job.totalRecords) }} processed
+                                    </div>
+                                    <div class="text-xs text-gray-600 space-y-1">
+                                        <div class="text-green-600">✓ {{ formatNumber(job.successfulVerifications) }} verified</div>
+                                        <div class="text-red-600">✗ {{ formatNumber(job.failedVerifications) }} failed</div>
+                                    </div>
+                                    <div *ngIf="job.completedDate" class="text-xs text-gray-500 mt-1">
+                                        Completed: {{ job.completedDate | date:'short' }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Progress Bar -->
+                            <div class="mt-4">
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div class="bg-green-500 h-2 rounded-full transition-all duration-500" 
+                                         [style.width.%]="(job.processedRecords / job.totalRecords) * 100"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="mt-4 flex space-x-2">
+                                <button *ngIf="job.status === 'completed'" 
+                                        (click)="downloadResults(job.id)"
+                                        class="bg-blue-500 text-white px-4 py-2 rounded text-sm hover:bg-blue-600 transition">
+                                    <i class="ri-download-line mr-1"></i>Download Results
+                                </button>
+                                <button *ngIf="job.status === 'completed'" 
+                                        (click)="generateBulkLetters(job.id)"
+                                        class="bg-green-500 text-white px-4 py-2 rounded text-sm hover:bg-green-600 transition">
+                                    <i class="ri-file-text-line mr-1"></i>Generate Letters
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

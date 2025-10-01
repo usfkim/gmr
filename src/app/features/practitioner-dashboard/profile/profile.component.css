@@ -1,0 +1,49 @@
+/* Profile specific styles */
+.profile-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-600) 100%);
+}
+
+.verification-badge {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.qr-code-container {
+    background: repeating-conic-gradient(#000 0% 25%, transparent 0% 50%) 50% / 20px 20px;
+    opacity: 0.1;
+}
+
+.contact-item {
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover {
+    background-color: rgba(59, 130, 246, 0.05);
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
+}
+
+.verification-check {
+    animation: checkmark 0.5s ease-in-out;
+}
+
+@keyframes checkmark {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}

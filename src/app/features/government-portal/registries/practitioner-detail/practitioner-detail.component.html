@@ -1,0 +1,363 @@
+<!-- Practitioner Detail View -->
+<div class="bg-white min-h-screen" *ngIf="practitioner">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Practitioner Header -->
+    <section class="bg-gradient-to-r from-indigo-600 to-purple-700 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <div class="flex items-center">
+                    <div class="w-20 h-20 rounded-full overflow-hidden border-4 border-white shadow-lg mr-6">
+                        <img *ngIf="practitioner.photo" 
+                             [src]="practitioner.photo" 
+                             [alt]="practitioner.name"
+                             class="w-full h-full object-cover">
+                        <div *ngIf="!practitioner.photo" 
+                             class="w-full h-full bg-gray-200 flex items-center justify-center">
+                            <i class="ri-user-line text-gray-400 text-2xl"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white mb-1">{{ practitioner.name }}</h1>
+                        <p class="text-indigo-100">{{ practitioner.profession }} - {{ practitioner.specialty }}</p>
+                        <p class="text-indigo-200 text-sm">License: {{ practitioner.licenseNumber }}</p>
+                        <div class="flex items-center mt-2">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium"
+                                  [ngClass]="getStatusColor(practitioner.status)">
+                                {{ practitioner.status | titlecase }}
+                            </span>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ml-2"
+                                  [ngClass]="getKycStatusColor(practitioner.kycStatus)">
+                                KYC: {{ practitioner.kycStatus | titlecase }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                    <button (click)="addNote()" 
+                            class="bg-white text-indigo-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
+                        <i class="ri-sticky-note-line mr-2"></i>
+                        Add Note
+                    </button>
+                    <button (click)="logout()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium text-sm">
+                        <i class="ri-logout-box-line mr-2"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Navigation Tabs -->
+    <section class="bg-white border-b border-gray-200">
+        <div class="container mx-auto px-4">
+            <nav class="flex space-x-8">
+                <button (click)="setActiveTab('overview')" 
+                        class="py-4 px-1 border-b-2 font-medium text-sm"
+                        [ngClass]="activeTab === 'overview' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'">
+                    Overview
+                </button>
+                <button (click)="setActiveTab('education')" 
+                        class="py-4 px-1 border-b-2 font-medium text-sm"
+                        [ngClass]="activeTab === 'education' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'">
+                    Education & KYC
+                </button>
+                <button (click)="setActiveTab('license')" 
+                        class="py-4 px-1 border-b-2 font-medium text-sm"
+                        [ngClass]="activeTab === 'license' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'">
+                    License History
+                </button>
+                <button (click)="setActiveTab('documents')" 
+                        class="py-4 px-1 border-b-2 font-medium text-sm"
+                        [ngClass]="activeTab === 'documents' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'">
+                    Document Locker
+                </button>
+                <button (click)="setActiveTab('cpd')" 
+                        class="py-4 px-1 border-b-2 font-medium text-sm"
+                        [ngClass]="activeTab === 'cpd' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700'">
+                    CPD Credits
+                </button>
+            </nav>
+        </div>
+    </section>
+    
+    <!-- Tab Content -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <!-- Overview Tab -->
+            <div *ngIf="activeTab === 'overview'" class="grid lg:grid-cols-3 gap-8">
+                <!-- Main Info -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Personal Information -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Personal Information</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Full Name</label>
+                                <p class="text-gray-800">{{ practitioner.name }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">National ID</label>
+                                <p class="text-gray-800">{{ practitioner.nationalId }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Date of Birth</label>
+                                <p class="text-gray-800">{{ practitioner.dateOfBirth | date:'mediumDate' }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Gender</label>
+                                <p class="text-gray-800">{{ practitioner.gender }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Nationality</label>
+                                <p class="text-gray-800">{{ practitioner.nationality }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Email</label>
+                                <p class="text-gray-800">{{ practitioner.email }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Professional Information -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Professional Information</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">License Number</label>
+                                <p class="text-gray-800">{{ practitioner.licenseNumber }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Profession</label>
+                                <p class="text-gray-800">{{ practitioner.profession }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Specialty</label>
+                                <p class="text-gray-800">{{ practitioner.specialty }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Primary Facility</label>
+                                <p class="text-gray-800">{{ practitioner.facility }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">Registration Date</label>
+                                <p class="text-gray-800">{{ practitioner.registrationDate | date:'mediumDate' }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-500">License Expiry</label>
+                                <p class="text-gray-800">{{ practitioner.expiryDate | date:'mediumDate' }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar -->
+                <div class="space-y-6">
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <button (click)="updateStatus('active')" 
+                                    class="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition text-sm">
+                                <i class="ri-check-line mr-2"></i>Activate License
+                            </button>
+                            <button (click)="updateStatus('suspended')" 
+                                    class="w-full bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition text-sm">
+                                <i class="ri-pause-line mr-2"></i>Suspend License
+                            </button>
+                            <button (click)="updateStatus('revoked')" 
+                                    class="w-full bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition text-sm">
+                                <i class="ri-delete-bin-line mr-2"></i>Revoke License
+                            </button>
+                            <button (click)="sendReminder()" 
+                                    class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition text-sm">
+                                <i class="ri-mail-line mr-2"></i>Send CPD Reminder
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Risk Assessment -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Risk Assessment</h3>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold mb-2" [ngClass]="getRiskColor(practitioner.riskScore)">
+                                {{ practitioner.riskScore }}/10
+                            </div>
+                            <div class="text-sm text-gray-600 mb-4">Risk Score</div>
+                            <div class="w-full bg-gray-200 rounded-full h-2">
+                                <div class="h-2 rounded-full" 
+                                     [ngClass]="practitioner.riskScore <= 3 ? 'bg-green-500' : practitioner.riskScore <= 6 ? 'bg-yellow-500' : 'bg-red-500'"
+                                     [style.width.%]="practitioner.riskScore * 10"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Education & KYC Tab -->
+            <div *ngIf="activeTab === 'education'" class="space-y-6">
+                <!-- Education History -->
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Education History</h3>
+                    <div class="space-y-4">
+                        <div *ngFor="let edu of practitioner.education" 
+                             class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium text-gray-800">{{ edu.degree }}</h4>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                      [ngClass]="edu.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'">
+                                    <i [ngClass]="edu.verified ? 'ri-verified-badge-fill' : 'ri-time-line'" class="mr-1"></i>
+                                    {{ edu.verified ? 'Verified' : 'Pending' }}
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-600 space-y-1">
+                                <div>Institution: {{ edu.institution }}</div>
+                                <div>Year: {{ edu.year }}</div>
+                                <div>Country: {{ edu.country }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Certifications -->
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Professional Certifications</h3>
+                    <div class="space-y-4">
+                        <div *ngFor="let cert of practitioner.certifications" 
+                             class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium text-gray-800">{{ cert.name }}</h4>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                      [ngClass]="getStatusColor(cert.status)">
+                                    {{ cert.status | titlecase }}
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-600 space-y-1">
+                                <div>Issuer: {{ cert.issuer }}</div>
+                                <div>Issued: {{ cert.issued | date:'mediumDate' }}</div>
+                                <div>Expires: {{ cert.expires | date:'mediumDate' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- License History Tab -->
+            <div *ngIf="activeTab === 'license'" class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">License Timeline & History</h3>
+                <div class="space-y-6">
+                    <div *ngFor="let history of practitioner.licenseHistory" 
+                         class="border-l-4 border-primary pl-6 pb-6">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-medium text-gray-800">{{ history.action }}</h4>
+                            <span class="text-sm text-gray-500">{{ history.date | date:'mediumDate' }}</span>
+                        </div>
+                        <div class="text-sm text-gray-600 space-y-1">
+                            <div><strong>Reason:</strong> {{ history.reason }}</div>
+                            <div><strong>Performed by:</strong> {{ history.performedBy }}</div>
+                            <div *ngIf="history.notes"><strong>Notes:</strong> {{ history.notes }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Document Locker Tab -->
+            <div *ngIf="activeTab === 'documents'" class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Document Locker</h3>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <div *ngFor="let doc of practitioner.documents" 
+                         class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <h4 class="font-medium text-gray-800">{{ doc.type }}</h4>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                  [ngClass]="getDocumentStatusColor(doc.status)">
+                                {{ doc.status | titlecase }}
+                            </span>
+                        </div>
+                        <div class="text-sm text-gray-600 space-y-1 mb-3">
+                            <div>{{ doc.name }}</div>
+                            <div>Uploaded: {{ doc.uploadDate | date:'mediumDate' }}</div>
+                            <div *ngIf="doc.verifiedBy">Verified by: {{ doc.verifiedBy }}</div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button (click)="downloadDocument(doc.name)" 
+                                    class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition">
+                                <i class="ri-download-line mr-1"></i>Download
+                            </button>
+                            <button *ngIf="doc.status === 'pending'" 
+                                    (click)="verifyDocument(doc.type)"
+                                    class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600 transition">
+                                <i class="ri-check-line mr-1"></i>Verify
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- CPD Credits Tab -->
+            <div *ngIf="activeTab === 'cpd'" class="space-y-6">
+                <!-- CPD Overview -->
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800">CPD Credits Overview</h3>
+                        <button (click)="sendReminder()" 
+                                class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition text-sm">
+                            <i class="ri-mail-line mr-2"></i>Send Reminder
+                        </button>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div class="text-center p-4 bg-blue-50 rounded-lg">
+                            <div class="text-2xl font-bold text-blue-600">{{ practitioner.cpdCredits }}</div>
+                            <div class="text-sm text-gray-600">Credits Earned</div>
+                        </div>
+                        <div class="text-center p-4 bg-gray-50 rounded-lg">
+                            <div class="text-2xl font-bold text-gray-600">{{ practitioner.requiredCredits }}</div>
+                            <div class="text-sm text-gray-600">Credits Required</div>
+                        </div>
+                        <div class="text-center p-4 bg-green-50 rounded-lg">
+                            <div class="text-2xl font-bold text-green-600">
+                                {{ ((practitioner.cpdCredits / practitioner.requiredCredits) * 100).toFixed(1) }}%
+                            </div>
+                            <div class="text-sm text-gray-600">Completion Rate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-blue-500 h-3 rounded-full" 
+                                 [style.width.%]="(practitioner.cpdCredits / practitioner.requiredCredits) * 100"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- CPD Activities -->
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">CPD Activities</h3>
+                    <div class="space-y-4">
+                        <div *ngFor="let activity of practitioner.cpdActivities" 
+                             class="border border-gray-200 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-2">
+                                <h4 class="font-medium text-gray-800">{{ activity.title }}</h4>
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                                    {{ activity.credits }} Credits
+                                </span>
+                            </div>
+                            <div class="text-sm text-gray-600 space-y-1">
+                                <div>Provider: {{ activity.provider }}</div>
+                                <div>Category: {{ activity.category }}</div>
+                                <div>Completed: {{ activity.completedDate | date:'mediumDate' }}</div>
+                                <div *ngIf="activity.certificate">Certificate: {{ activity.certificate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

@@ -1,0 +1,17 @@
+/* Bulk Actions Styles */
+.action-card {
+    transition: all 0.3s ease;
+}
+
+.action-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.criteria-grid {
+    transition: all 0.3s ease;
+}
+
+.results-summary {
+    transition: all 0.3s ease;
+}

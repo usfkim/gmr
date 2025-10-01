@@ -1,0 +1,108 @@
+/* CPD Tracker Styles */
+.cpd-overview-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+.cpd-activity {
+    transition: all 0.3s ease;
+}
+
+.cpd-activity:hover {
+    background-color: rgba(34, 197, 94, 0.02);
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
+}
+
+.partner-card {
+    transition: all 0.3s ease;
+}
+
+.partner-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.requirement-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+.auto-sync-indicator {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.evidence-tag {
+    transition: all 0.3s ease;
+}
+
+.evidence-tag:hover {
+    transform: scale(1.05);
+    background-color: var(--primary);
+    color: white;
+}
+
+.learning-outcome {
+    transition: all 0.3s ease;
+}
+
+.learning-outcome:hover {
+    background-color: rgba(34, 197, 94, 0.05);
+    border-radius: 4px;
+    padding: 2px 4px;
+    margin: -2px -4px;
+}
+
+/* Category-specific colors */
+.category-clinical {
+    border-left: 4px solid #ef4444;
+}
+
+.category-research {
+    border-left: 4px solid #8b5cf6;
+}
+
+.category-teaching {
+    border-left: 4px solid #06b6d4;
+}
+
+.category-professional {
+    border-left: 4px solid #f59e0b;
+}
+
+.category-ethics {
+    border-left: 4px solid #10b981;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cpd-overview-card {
+        padding: 16px;
+    }
+    
+    .partner-card {
+        padding: 12px;
+    }
+    
+    .cpd-activity {
+        padding: 16px;
+    }
+}

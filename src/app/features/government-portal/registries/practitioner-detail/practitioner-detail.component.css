@@ -1,0 +1,78 @@
+/* Practitioner Detail Styles */
+.tab-button {
+    transition: all 0.3s ease;
+}
+
+.tab-button:hover {
+    color: var(--primary);
+}
+
+.tab-button.active {
+    border-bottom-color: var(--primary);
+    color: var(--primary);
+}
+
+.info-card {
+    transition: all 0.3s ease;
+}
+
+.info-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-item {
+    position: relative;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 8px;
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+}
+
+.document-card {
+    transition: all 0.3s ease;
+}
+
+.document-card:hover {
+    border-color: var(--primary);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+/* Risk score visualization */
+.risk-low {
+    color: #059669;
+}
+
+.risk-medium {
+    color: #d97706;
+}
+
+.risk-high {
+    color: #dc2626;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .info-card {
+        padding: 16px;
+    }
+    
+    .timeline-item {
+        padding-left: 20px;
+    }
+}

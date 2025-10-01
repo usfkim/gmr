@@ -1,0 +1,359 @@
+<!-- Embassy Verification Center -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Verification Center Header -->
+    <section class="bg-gradient-to-r from-blue-800 to-indigo-900 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-white mb-1">Medical Credential Verification</h1>
+                    <p class="text-blue-100">Official verification for visa and work permit applications</p>
+                    <p class="text-blue-200 text-sm mt-1" *ngIf="currentUser">
+                        Logged in as: {{ currentUser.email }}
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                    <a routerLink="/embassy" 
+                       class="bg-white text-blue-800 px-4 py-2 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Back to Dashboard
+                    </a>
+                    <button (click)="logout()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium text-sm">
+                        <i class="ri-logout-box-line mr-2"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Verification Form -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-8">
+                    <!-- Verification Request Form -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-6">Verification Request</h2>
+                        
+                        <form [formGroup]="verificationForm" (ngSubmit)="onSubmit()">
+                            <div class="space-y-4">
+                                <!-- License Number -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        License Number *
+                                    </label>
+                                    <sc-input formControlName="licenseNumber" 
+                                              placeholder="e.g., UMC-UG-2458" />
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        Enter the practitioner's Uganda Medical Registry license number
+                                    </p>
+                                </div>
+                                
+                                <!-- Country -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Country of Practice *
+                                    </label>
+                                    <sc-select formControlName="country">
+                                        <sc-select-option value="Uganda" label="Uganda" />
+                                        <sc-select-option value="Kenya" label="Kenya" />
+                                        <sc-select-option value="Tanzania" label="Tanzania" />
+                                        <sc-select-option value="Rwanda" label="Rwanda" />
+                                        <sc-select-option value="Other" label="Other" />
+                                    </sc-select>
+                                </div>
+                                
+                                <!-- Purpose -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Verification Purpose *
+                                    </label>
+                                    <sc-select formControlName="purpose">
+                                        <sc-select-option value="visa_application" label="Visa Application" />
+                                        <sc-select-option value="work_permit" label="Work Permit" />
+                                        <sc-select-option value="credential_recognition" label="Credential Recognition" />
+                                        <sc-select-option value="immigration_assessment" label="Immigration Assessment" />
+                                    </sc-select>
+                                </div>
+                                
+                                <!-- Requested By -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Requested By *
+                                    </label>
+                                    <sc-input formControlName="requestedBy" 
+                                              placeholder="Officer name" />
+                                </div>
+                                
+                                <!-- Department -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Department *
+                                    </label>
+                                    <sc-select formControlName="department">
+                                        <sc-select-option value="Visa Section" label="Visa Section" />
+                                        <sc-select-option value="Immigration" label="Immigration" />
+                                        <sc-select-option value="Consular Services" label="Consular Services" />
+                                        <sc-select-option value="Trade & Investment" label="Trade & Investment" />
+                                        <sc-select-option value="Other" label="Other" />
+                                    </sc-select>
+                                </div>
+                                
+                                <!-- Notes -->
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Additional Notes
+                                    </label>
+                                    <sc-textarea-input formControlName="notes" 
+                                                       placeholder="Optional notes about this verification request" />
+                                </div>
+                            </div>
+                            
+                            <!-- Error Message -->
+                            <div *ngIf="verificationError" 
+                                 class="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                                {{ verificationError }}
+                            </div>
+                            
+                            <!-- Submit Button -->
+                            <div class="mt-6">
+                                <button type="submit" 
+                                        [disabled]="isVerifying || verificationForm.invalid"
+                                        class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed">
+                                    <span *ngIf="!isVerifying">
+                                        <i class="ri-search-line mr-2"></i>
+                                        Verify Practitioner
+                                    </span>
+                                    <span *ngIf="isVerifying" class="flex items-center justify-center">
+                                        <i class="ri-loader-4-line animate-spin mr-2"></i>
+                                        Verifying...
+                                    </span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Verification Results -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-6">Verification Results</h2>
+                        
+                        <!-- No Results State -->
+                        <div *ngIf="!verificationResult && !verificationError && !isVerifying" 
+                             class="text-center py-12">
+                            <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="ri-search-line text-gray-400 text-2xl"></i>
+                            </div>
+                            <p class="text-gray-500">Enter license details and click verify to see results</p>
+                        </div>
+                        
+                        <!-- Loading State -->
+                        <div *ngIf="isVerifying" class="text-center py-12">
+                            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="ri-loader-4-line animate-spin text-blue-600 text-2xl"></i>
+                            </div>
+                            <p class="text-gray-600">Verifying credentials with Uganda Medical Registry...</p>
+                        </div>
+                        
+                        <!-- Verification Results -->
+                        <div *ngIf="verificationResult" class="space-y-6">
+                            <!-- Practitioner Info -->
+                            <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                <div class="flex items-center mb-3">
+                                    <i [ngClass]="getStatusIcon(verificationResult.practitioner.status)" class="text-2xl mr-3"></i>
+                                    <div>
+                                        <h3 class="font-semibold text-gray-800">{{ verificationResult.practitioner.name }}</h3>
+                                        <p class="text-sm text-gray-600">{{ verificationResult.practitioner.profession }}
+                                            <span *ngIf="verificationResult?.practitioner?.specialty"> - {{ verificationResult.practitioner.specialty }}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-700 mb-1">License Number</h4>
+                                        <p class="text-gray-800">{{ verificationResult.practitioner.licenseNumber }}</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-700 mb-1">Status</h4>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                              [class]="getStatusColor(verificationResult.practitioner.status)">
+                                            {{ verificationResult.practitioner.status }}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-700 mb-1">Registration Date</h4>
+                                        <p class="text-gray-800">{{ verificationResult.practitioner.registrationDate | date:'mediumDate' }}</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-700 mb-1">Expiry Date</h4>
+                                        <p class="text-gray-800">{{ verificationResult.practitioner.expiryDate | date:'mediumDate' }}</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-700 mb-1">Primary Facility</h4>
+                                        <p class="text-gray-800">{{ verificationResult.practitioner.facility }}</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-700 mb-1">Region</h4>
+                                        <p class="text-gray-800">{{ verificationResult.practitioner.region }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Qualifications -->
+                            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-800 mb-3">Educational Qualifications</h4>
+                                <div class="space-y-2">
+                                    <div *ngFor="let qual of verificationResult?.practitioner?.qualifications || []" 
+                                         class="bg-white rounded p-3 border border-blue-100">
+                                        <div class="font-medium text-gray-800">{{ qual.degree }}</div>
+                                        <div class="text-sm text-gray-600">{{ qual.institution }}, {{ qual.country }} ({{ qual.year }})</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Scope of Practice -->
+                            <div class="bg-purple-50 border border-purple-200 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-800 mb-3">Scope of Practice</h4>
+                                <div class="flex flex-wrap gap-2">
+                                    <span *ngFor="let scope of verificationResult?.practitioner?.scopeOfPractice || []" 
+                                          class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                        {{ scope }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Sanctions (if any) -->
+                            <div *ngIf="verificationResult?.practitioner?.sanctions && verificationResult.practitioner.sanctions.length > 0" 
+                                 class="bg-red-50 border border-red-200 rounded-lg p-4">
+                                <h4 class="font-medium text-gray-800 mb-3 flex items-center">
+                                    <i class="ri-alert-line text-red-600 mr-2"></i>
+                                    Sanctions & Disciplinary Actions
+                                </h4>
+                                <div class="space-y-2">
+                                    <div *ngFor="let sanction of verificationResult?.practitioner?.sanctions || []" 
+                                         class="bg-white rounded p-3 border border-red-100">
+                                        <div class="font-medium text-red-800">{{ sanction.type }}</div>
+                                        <div class="text-sm text-gray-600">{{ sanction.reason }}</div>
+                                        <div class="text-xs text-gray-500">{{ sanction.date | date:'mediumDate' }} - {{ sanction.status }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Actions -->
+                            <div class="flex space-x-4">
+                                <button *ngIf="verificationResult?.officialLetterAvailable" 
+                                        (click)="generateOfficialLetter()"
+                                        class="flex-1 bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition font-medium">
+                                    <i class="ri-file-text-line mr-2"></i>
+                                    Generate Official Letter
+                                </button>
+                                <button (click)="clearResults()" 
+                                        class="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition font-medium">
+                                    <i class="ri-refresh-line mr-2"></i>
+                                    New Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Information Panel -->
+    <section class="py-8 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Verification Information</h3>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <!-- What We Verify -->
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-3">What We Verify</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li class="flex items-center">
+                                    <i class="ri-check-line text-green-600 mr-2"></i>
+                                    Current license status and validity
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-check-line text-green-600 mr-2"></i>
+                                    Professional qualifications and education
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-check-line text-green-600 mr-2"></i>
+                                    Scope of practice and specializations
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-check-line text-green-600 mr-2"></i>
+                                    Disciplinary actions and sanctions
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-check-line text-green-600 mr-2"></i>
+                                    Registration and expiry dates
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-check-line text-green-600 mr-2"></i>
+                                    Primary practice facility and location
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Official Letter Features -->
+                        <div>
+                            <h4 class="font-medium text-gray-800 mb-3">Official Letter Features</h4>
+                            <ul class="space-y-2 text-sm text-gray-600">
+                                <li class="flex items-center">
+                                    <i class="ri-shield-check-line text-blue-600 mr-2"></i>
+                                    Time-stamped and digitally signed
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-qr-code-line text-blue-600 mr-2"></i>
+                                    Secure QR code for verification
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-government-line text-blue-600 mr-2"></i>
+                                    Official embassy letterhead
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-file-lock-line text-blue-600 mr-2"></i>
+                                    Tamper-proof PDF format
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-global-line text-blue-600 mr-2"></i>
+                                    Internationally recognized format
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="ri-history-line text-blue-600 mr-2"></i>
+                                    Complete audit trail maintained
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Security Notice -->
+                    <div class="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                        <div class="flex items-start">
+                            <i class="ri-information-line text-yellow-600 text-lg mt-0.5 mr-3"></i>
+                            <div>
+                                <h4 class="font-medium text-yellow-800 mb-1">Security & Compliance</h4>
+                                <p class="text-sm text-yellow-700">
+                                    All verification requests are logged with timestamp, requesting officer, and purpose. 
+                                    This portal uses multi-factor authentication and IP whitelisting for enhanced security. 
+                                    Official letters are legally binding documents for visa and immigration purposes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

@@ -1,0 +1,275 @@
+<!-- Country Deployment Map -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Map Header -->
+    <section class="bg-gradient-to-r from-green-600 to-blue-700 py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-6xl mx-auto text-center">
+                <h1 class="text-4xl font-bold text-white mb-4">Global Deployment Map</h1>
+                <p class="text-xl text-green-100 mb-8">
+                    Tracking the expansion of medical registry systems across Africa and beyond
+                </p>
+                
+                <!-- Quick Stats -->
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ getCountriesByStatus('launched').length }}</div>
+                        <div class="text-sm text-green-100">Countries Launched</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ formatNumber(getTotalPractitioners()) }}</div>
+                        <div class="text-sm text-green-100">Total Practitioners</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ formatNumber(getTotalFacilities()) }}</div>
+                        <div class="text-sm text-green-100">Healthcare Facilities</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ getAverageWorkforceDensity().toFixed(1) }}/10k</div>
+                        <div class="text-sm text-green-100">Avg. Workforce Density</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Filters -->
+    <section class="py-6 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Region</label>
+                        <select (change)="onRegionChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Regions</option>
+                            <option value="East Africa">East Africa</option>
+                            <option value="West Africa">West Africa</option>
+                            <option value="Southern Africa">Southern Africa</option>
+                            <option value="Central Africa">Central Africa</option>
+                            <option value="North Africa">North Africa</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Deployment Status</label>
+                        <select (change)="onStatusChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Statuses</option>
+                            <option value="launched">Launched</option>
+                            <option value="onboarding">Onboarding</option>
+                            <option value="in_discussions">In Discussions</option>
+                            <option value="planned">Planned</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-end">
+                        <button (click)="applyFilters()" 
+                                class="w-full bg-primary text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
+                            <i class="ri-refresh-line mr-2"></i>
+                            Update Map
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Country Grid -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div *ngFor="let country of filteredCountries" 
+                     class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                    <!-- Country Header -->
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="text-3xl mr-3">{{ country.flag }}</span>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">{{ country.country }}</h3>
+                                    <p class="text-sm text-gray-600">{{ country.region }}</p>
+                                    <p class="text-xs text-gray-500">Capital: {{ country.capital }}</p>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border-2"
+                                  [ngClass]="getStatusColor(country.status)">
+                                <i [class]="getStatusIcon(country.status)" class="mr-2"></i>
+                                {{ getStatusDisplayName(country.status) }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Country Details -->
+                    <div class="p-6">
+                        <div class="space-y-4">
+                            <!-- Launch Date -->
+                            <div *ngIf="country.launchDate">
+                                <h4 class="text-sm font-medium text-gray-700">Launch Date</h4>
+                                <p class="text-gray-800">{{ formatDate(country.launchDate) }}</p>
+                            </div>
+                            
+                            <!-- Statistics -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700">Practitioners</h4>
+                                    <p class="text-lg font-semibold text-gray-800">{{ formatNumber(country.practitioners) }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700">Facilities</h4>
+                                    <p class="text-lg font-semibold text-gray-800">{{ formatNumber(country.facilities) }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700">Population</h4>
+                                    <p class="text-lg font-semibold text-gray-800">{{ formatNumber(country.population) }}</p>
+                                </div>
+                                <div>
+                                    <h4 class="text-sm font-medium text-gray-700">Density</h4>
+                                    <p class="text-lg font-semibold text-gray-800">{{ country.workforceDensity }}/10k</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Languages -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Languages</h4>
+                                <div class="flex flex-wrap gap-1">
+                                    <span *ngFor="let language of country.languages" 
+                                          class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        {{ language }}
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Regulatory Bodies -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Regulatory Bodies</h4>
+                                <div class="space-y-1">
+                                    <div *ngFor="let body of country.regulatoryBodies" 
+                                         class="text-sm text-gray-600">
+                                        • {{ body }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Partner Institutions -->
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-700 mb-2">Key Partners</h4>
+                                <div class="space-y-1">
+                                    <div *ngFor="let partner of country.partnerInstitutions.slice(0, 2)" 
+                                         class="text-sm text-gray-600">
+                                        • {{ partner }}
+                                    </div>
+                                    <div *ngIf="country.partnerInstitutions.length > 2" 
+                                         class="text-xs text-gray-500">
+                                        +{{ country.partnerInstitutions.length - 2 }} more partners
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="mt-6 pt-4 border-t border-gray-200">
+                            <div class="flex space-x-2">
+                                <button *ngIf="country.caseStudyAvailable" 
+                                        class="flex-1 bg-blue-500 text-white px-3 py-2 rounded text-sm hover:bg-blue-600 transition">
+                                    <i class="ri-file-text-line mr-1"></i>Case Study
+                                </button>
+                                <button *ngIf="country.status === 'launched'" 
+                                        class="flex-1 bg-green-500 text-white px-3 py-2 rounded text-sm hover:bg-green-600 transition">
+                                    <i class="ri-external-link-line mr-1"></i>Visit Portal
+                                </button>
+                                <button class="bg-gray-500 text-white px-3 py-2 rounded text-sm hover:bg-gray-600 transition">
+                                    <i class="ri-information-line mr-1"></i>Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Deployment Timeline -->
+    <section class="py-8 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-6">Deployment Timeline</h2>
+                
+                <div class="space-y-6">
+                    <!-- 2022 -->
+                    <div class="flex items-start">
+                        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mr-6">
+                            <span class="text-green-600 font-bold">2022</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-medium text-gray-800 mb-2">Foundation Year</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-2">🇬🇭</span>
+                                    <span class="text-gray-700">Ghana Medical Registry launched (August 2022)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 2023 -->
+                    <div class="flex items-start">
+                        <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mr-6">
+                            <span class="text-blue-600 font-bold">2023</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-medium text-gray-800 mb-2">Expansion Phase</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-2">🇺🇬</span>
+                                    <span class="text-gray-700">Uganda Medical Registry launched (January 2023)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 2025 -->
+                    <div class="flex items-start">
+                        <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mr-6">
+                            <span class="text-purple-600 font-bold">2025</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-medium text-gray-800 mb-2">Regional Growth</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-2">🇰🇪</span>
+                                    <span class="text-gray-700">Kenya onboarding (March 2025)</span>
+                                </div>
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-2">🇳🇬</span>
+                                    <span class="text-gray-700">Nigeria onboarding (June 2025)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Future -->
+                    <div class="flex items-start">
+                        <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mr-6">
+                            <span class="text-gray-600 font-bold">2026+</span>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="font-medium text-gray-800 mb-2">Continental Vision</h3>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <span class="text-2xl mr-2">🌍</span>
+                                    <span class="text-gray-700">Pan-African medical registry network</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

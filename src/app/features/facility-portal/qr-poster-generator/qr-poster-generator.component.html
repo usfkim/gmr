@@ -1,0 +1,241 @@
+<!-- QR Poster Generator -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- QR Poster Header -->
+    <section class="bg-gradient-to-r from-purple-600 to-pink-700 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-white mb-1">QR Poster Generator</h1>
+                    <p class="text-purple-100">Create lobby displays with verified staff information</p>
+                    <p class="text-purple-200 text-sm mt-1" *ngIf="currentUser">
+                        Logged in as: {{ currentUser.email }}
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                    <a routerLink="/facility" 
+                       class="bg-white text-purple-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Back to Dashboard
+                    </a>
+                    <button (click)="logout()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium text-sm">
+                        <i class="ri-logout-box-line mr-2"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Poster Configuration -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Configuration Panel -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Template Selection -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-6">Select Poster Template</h2>
+                        
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div *ngFor="let template of posterTemplates" 
+                                 class="border rounded-lg p-4 cursor-pointer transition-all"
+                                 [ngClass]="selectedTemplate === template.id ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-purple-300'"
+                                 (click)="onTemplateChange(template.id)">
+                                <div class="flex items-center justify-between mb-3">
+                                    <h3 class="font-medium text-gray-800">{{ template.name }}</h3>
+                                    <div class="flex items-center">
+                                        <input type="radio" 
+                                               [checked]="selectedTemplate === template.id"
+                                               class="text-purple-600">
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-600 mb-3">{{ template.description }}</p>
+                                <div class="flex items-center justify-between text-xs text-gray-500">
+                                    <span>{{ template.size }} {{ template.orientation }}</span>
+                                    <span>{{ formatNumber(template.downloadCount) }} downloads</span>
+                                </div>
+                                <div *ngIf="template.lastGenerated" class="text-xs text-gray-500 mt-1">
+                                    Last generated: {{ template.lastGenerated | date:'mediumDate' }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Content Filters -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-6">Content Filters</h2>
+                        
+                        <!-- Department Selection -->
+                        <div class="mb-6">
+                            <h3 class="font-medium text-gray-800 mb-3">Select Departments</h3>
+                            <div class="grid md:grid-cols-3 gap-3">
+                                <label *ngFor="let department of departments" 
+                                       class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                                    <input type="checkbox" 
+                                           [checked]="selectedDepartments.includes(department)"
+                                           (change)="onDepartmentToggle(department)"
+                                           class="mr-3 text-purple-600">
+                                    <span class="text-sm text-gray-700">{{ department }}</span>
+                                </label>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">
+                                Leave empty to include all departments
+                            </p>
+                        </div>
+                        
+                        <!-- Additional Options -->
+                        <div class="space-y-4">
+                            <label class="flex items-center">
+                                <input type="checkbox" 
+                                       [(ngModel)]="includeExpiringSoon"
+                                       class="mr-3 text-purple-600">
+                                <span class="text-sm text-gray-700">Only include staff with licenses expiring in 30 days</span>
+                            </label>
+                            
+                            <label class="flex items-center">
+                                <input type="checkbox" 
+                                       [(ngModel)]="autoUpdate"
+                                       class="mr-3 text-purple-600">
+                                <span class="text-sm text-gray-700">Enable automatic daily updates</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Staff Preview -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-xl font-semibold text-gray-800">Staff to Include</h2>
+                            <span class="bg-purple-100 text-purple-800 text-sm px-3 py-1 rounded-full">
+                                {{ getFilteredStaffCount() }} staff members
+                            </span>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-4 max-h-96 overflow-y-auto">
+                            <div *ngFor="let staff of verifiedStaff" 
+                                 class="flex items-center p-3 border border-gray-200 rounded-lg"
+                                 [ngClass]="(selectedDepartments.length === 0 || selectedDepartments.includes(staff.department)) ? 'bg-green-50 border-green-200' : 'bg-gray-50'">
+                                <div class="w-10 h-10 rounded-full overflow-hidden bg-gray-200 mr-3">
+                                    <img *ngIf="staff.photo" 
+                                         [src]="staff.photo" 
+                                         [alt]="staff.name"
+                                         class="w-full h-full object-cover">
+                                    <div *ngIf="!staff.photo" 
+                                         class="w-full h-full flex items-center justify-center">
+                                        <i class="ri-user-line text-gray-400"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="font-medium text-gray-800 text-sm">{{ staff.name }}</h3>
+                                    <p class="text-xs text-gray-600">{{ staff.position }} - {{ staff.department }}</p>
+                                    <p class="text-xs text-gray-500">{{ staff.licenseNumber }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Preview and Actions -->
+                <div class="space-y-6">
+                    <!-- Template Preview -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Template Preview</h3>
+                        
+                        <div *ngIf="getSelectedTemplate()" class="space-y-4">
+                            <!-- Mock poster preview -->
+                            <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center bg-gray-50">
+                                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <i class="ri-image-line text-purple-600 text-2xl"></i>
+                                </div>
+                                <h4 class="font-medium text-gray-800 mb-2">{{ getSelectedTemplate()!.name }}</h4>
+                                <p class="text-sm text-gray-600 mb-4">{{ getSelectedTemplate()!.description }}</p>
+                                
+                                <div class="text-xs text-gray-500 space-y-1">
+                                    <div>Size: {{ getSelectedTemplate()!.size }} {{ getSelectedTemplate()!.orientation }}</div>
+                                    <div>Layout: {{ getSelectedTemplate()!.layout | titlecase }}</div>
+                                    <div>Staff: {{ getFilteredStaffCount() }} members</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Template Features -->
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">QR Codes</span>
+                                    <i [ngClass]="getSelectedTemplate()!.includeQr ? 'ri-check-line text-green-600' : 'ri-close-line text-red-600'"></i>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Photos</span>
+                                    <i [ngClass]="getSelectedTemplate()!.includePhotos ? 'ri-check-line text-green-600' : 'ri-close-line text-red-600'"></i>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Facility Info</span>
+                                    <i [ngClass]="getSelectedTemplate()!.includeFacilityInfo ? 'ri-check-line text-green-600' : 'ri-close-line text-red-600'"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Generation Actions -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Generate Poster</h3>
+                        
+                        <div class="space-y-3">
+                            <button (click)="previewPoster()" 
+                                    class="w-full bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition font-medium">
+                                <i class="ri-eye-line mr-2"></i>
+                                Preview Poster
+                            </button>
+                            
+                            <button (click)="generatePoster()" 
+                                    class="w-full bg-purple-500 text-white px-4 py-3 rounded-lg hover:bg-purple-600 transition font-medium">
+                                <i class="ri-printer-line mr-2"></i>
+                                Generate & Download
+                            </button>
+                            
+                            <button (click)="scheduleAutoUpdate()" 
+                                    class="w-full bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition font-medium">
+                                <i class="ri-calendar-line mr-2"></i>
+                                {{ autoUpdate ? 'Configure' : 'Enable' }} Auto-Update
+                            </button>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-gray-200">
+                            <h4 class="font-medium text-gray-800 mb-2 text-sm">Usage Information</h4>
+                            <div class="text-xs text-gray-600 space-y-1">
+                                <div>• Posters are automatically updated when staff changes</div>
+                                <div>• QR codes link to real-time verification</div>
+                                <div>• High-resolution PDF suitable for printing</div>
+                                <div>• Compliant with facility branding guidelines</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Generations -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Generations</h3>
+                        
+                        <div class="space-y-3">
+                            <div *ngFor="let template of getRecentTemplates()" 
+                                 class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div>
+                                    <div class="font-medium text-gray-800 text-sm">{{ template.name }}</div>
+                                    <div class="text-xs text-gray-500">{{ template.lastGenerated | date:'medium' }}</div>
+                                </div>
+                                <button (click)="downloadPoster()" 
+                                        class="bg-purple-500 text-white px-3 py-1 rounded text-xs hover:bg-purple-600 transition">
+                                    <i class="ri-download-line mr-1"></i>Download
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

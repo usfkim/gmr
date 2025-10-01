@@ -1,0 +1,287 @@
+<!-- My License Management -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- License Header -->
+    <section class="bg-gradient-to-r from-blue-600 to-indigo-700 py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-white mb-2">My License</h1>
+                    <p class="text-blue-100">Manage your professional license and renewal requirements</p>
+                    <p class="text-blue-200 text-sm mt-1" *ngIf="currentUser">
+                        {{ currentUser.name }} - {{ licenseDetails.licenseNumber }}
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                    <a routerLink="/dashboard" 
+                       class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition font-medium">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Back to Dashboard
+                    </a>
+                    <button (click)="logout()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium">
+                        <i class="ri-logout-box-line mr-2"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- License Status Overview -->
+    <section class="py-8 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- License Status Card -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-800">License Status</h2>
+                            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium border-2"
+                                  [class]="getStatusColor(licenseDetails.status)">
+                                <i class="ri-verified-badge-fill mr-2"></i>
+                                {{ licenseDetails.status }}
+                            </span>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 mb-2">License Number</h3>
+                                <p class="text-lg font-semibold text-gray-800">{{ licenseDetails.licenseNumber }}</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 mb-2">Regulatory Body</h3>
+                                <p class="text-lg text-gray-800">{{ licenseDetails.regulatoryBody }}</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 mb-2">Issue Date</h3>
+                                <p class="text-lg text-gray-800">{{ formatDate(licenseDetails.issueDate) }}</p>
+                            </div>
+                            
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-500 mb-2">Expiry Date</h3>
+                                <p class="text-lg text-gray-800" [class]="getExpiryDateClass()">
+                                    {{ formatDate(licenseDetails.expiryDate) }}
+                                </p>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    {{ getDaysUntilExpiry() }} days remaining
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <!-- Specialties -->
+                        <div class="mt-6">
+                            <h3 class="text-sm font-medium text-gray-500 mb-3">Specialties & Endorsements</h3>
+                            <div class="flex flex-wrap gap-2">
+                                <span *ngFor="let specialty of licenseDetails.specialty" 
+                                      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                    {{ specialty }}
+                                </span>
+                                <span *ngFor="let endorsement of licenseDetails.endorsements" 
+                                      class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    <i class="ri-award-line mr-1"></i>
+                                    {{ endorsement }}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Actions -->
+                        <div class="mt-6 pt-6 border-t border-gray-200">
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <button (click)="downloadCertificate()" 
+                                        class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition font-medium">
+                                    <i class="ri-download-line mr-2"></i>
+                                    Download Certificate
+                                </button>
+                                <button *ngIf="licenseDetails.renewalEligible" 
+                                        (click)="startRenewal()"
+                                        class="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 transition font-medium">
+                                    <i class="ri-refresh-line mr-2"></i>
+                                    Start Renewal
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Expiry Countdown -->
+                <div class="space-y-6">
+                    <!-- Countdown Timer -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Expiry Countdown</h3>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold mb-2" [class]="getCountdownTextClass()">
+                                {{ getDaysUntilExpiry() }}
+                            </div>
+                            <div class="text-sm text-gray-600 mb-4">Days Until Expiry</div>
+                            
+                            <!-- Progress Ring -->
+                            <div class="relative w-24 h-24 mx-auto mb-4">
+                                <svg class="w-24 h-24 transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="text-gray-200" stroke="currentColor" stroke-width="3" fill="none"
+                                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                    <path [class]="getProgressRingClass()" 
+                                          stroke="currentColor" stroke-width="3" fill="none"
+                                          stroke-linecap="round"
+                                          [attr.stroke-dasharray]="(365 - getDaysUntilExpiry()) / 365 * 100 + ', 100'"
+                                          d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"></path>
+                                </svg>
+                            </div>
+                            
+                            <div class="text-xs text-gray-500">
+                                Renewal deadline: {{ getDaysUntilRenewalDeadline() }} days
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Quick Actions -->
+                    <div class="bg-white rounded-lg shadow-sm border p-6">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-4">Quick Actions</h3>
+                        <div class="space-y-3">
+                            <a routerLink="/dashboard/cpd" 
+                               class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition font-medium text-center block">
+                                <i class="ri-book-read-line mr-2"></i>
+                                View CPD Progress
+                            </a>
+                            <a routerLink="/dashboard/payments" 
+                               class="w-full bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition font-medium text-center block">
+                                <i class="ri-money-dollar-circle-line mr-2"></i>
+                                Make Payment
+                            </a>
+                            <a routerLink="/dashboard/documents" 
+                               class="w-full bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition font-medium text-center block">
+                                <i class="ri-folder-line mr-2"></i>
+                                Document Vault
+                            </a>
+                            <button (click)="reportIssue()" 
+                                    class="w-full bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition font-medium">
+                                <i class="ri-customer-service-line mr-2"></i>
+                                Report Issue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Renewal Requirements -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">Renewal Requirements</h2>
+                        <button *ngIf="getDaysUntilRenewalDeadline() > 0" 
+                                (click)="requestExtension()"
+                                class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition font-medium text-sm">
+                            <i class="ri-time-line mr-2"></i>
+                            Request Extension
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div *ngFor="let requirement of renewalRequirements" 
+                             class="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow"
+                             [class]="getRequirementBgClass(requirement.status)">
+                            <div class="flex items-start justify-between">
+                                <div class="flex items-start">
+                                    <div class="w-10 h-10 rounded-full flex items-center justify-center mr-4" [class]="getRequirementIconBgClass(requirement.status)">
+                                        <i [class]="getRequirementIcon(requirement.type) + ' ' + getRequirementIconTextClass(requirement.status)"></i>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="font-medium text-gray-800">{{ requirement.description }}</h3>
+                                        <p class="text-sm text-gray-600 mt-1" *ngIf="requirement.details">
+                                            {{ requirement.details }}
+                                        </p>
+                                        <div class="flex items-center mt-2">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                                  [class]="getRequirementStatusColor(requirement.status)">
+                                                {{ requirement.status }}
+                                            </span>
+                                            <span *ngIf="requirement.dueDate" class="text-xs text-gray-500 ml-3">
+                                                Due: {{ formatDate(requirement.dueDate) }}
+                                            </span>
+                                            <span *ngIf="requirement.completedDate" class="text-xs text-gray-500 ml-3">
+                                                Completed: {{ formatDate(requirement.completedDate) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="flex flex-col space-y-2">
+                                    <button *ngIf="requirement.type === 'cpd_credits' && requirement.status === 'pending'" 
+                                            (click)="uploadCpdEvidence()"
+                                            class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition">
+                                        <i class="ri-upload-line mr-1"></i>Upload Evidence
+                                    </button>
+                                    <button *ngIf="requirement.type === 'payment' && requirement.status === 'pending'" 
+                                            (click)="payRenewalFee()"
+                                            class="bg-green-500 text-white px-3 py-1 rounded text-xs hover:bg-green-600 transition">
+                                        <i class="ri-money-dollar-circle-line mr-1"></i>Pay Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- License History -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-sm border p-6">
+                    <h2 class="text-xl font-semibold text-gray-800 mb-6">License History</h2>
+                    
+                    <div class="space-y-6">
+                        <div *ngFor="let history of licenseHistory" 
+                             class="relative border-l-4 border-blue-500 pl-6 pb-6">
+                            <!-- Timeline dot -->
+                            <div class="absolute -left-2 top-2 w-4 h-4 bg-blue-500 rounded-full border-2 border-white"></div>
+                            
+                            <div class="flex items-start justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center mb-2">
+                                        <i [class]="getActionIcon(history.action) + ' text-lg mr-2'"></i>
+                                        <h3 class="font-medium text-gray-800">{{ history.action }}</h3>
+                                        <span class="text-sm text-gray-500 ml-3">{{ formatDate(history.date) }}</span>
+                                    </div>
+                                    
+                                    <div class="text-sm text-gray-600 space-y-1">
+                                        <div><strong>Reason:</strong> {{ history.reason }}</div>
+                                        <div><strong>Performed by:</strong> {{ history.performedBy }}</div>
+                                        <div><strong>Reference:</strong> {{ history.referenceNumber }}</div>
+                                        <div *ngIf="history.notes"><strong>Notes:</strong> {{ history.notes }}</div>
+                                    </div>
+                                    
+                                    <!-- Documents -->
+                                    <div *ngIf="history.documents && history.documents.length > 0" class="mt-3">
+                                        <h4 class="text-sm font-medium text-gray-700 mb-2">Related Documents:</h4>
+                                        <div class="flex flex-wrap gap-2">
+                                            <span *ngFor="let doc of history.documents" 
+                                                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                                <i class="ri-file-line mr-1"></i>
+                                                {{ doc }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

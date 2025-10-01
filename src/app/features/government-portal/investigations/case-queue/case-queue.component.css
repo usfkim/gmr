@@ -1,0 +1,86 @@
+/* Investigation Case Queue Styles */
+.case-card {
+    transition: all 0.3s ease;
+}
+
+.case-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.priority-indicator {
+    position: relative;
+}
+
+.priority-critical {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.sla-indicator {
+    transition: all 0.3s ease;
+}
+
+.sla-overdue {
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% {
+        opacity: 1;
+    }
+    51%, 100% {
+        opacity: 0.5;
+    }
+}
+
+.evidence-count {
+    transition: all 0.3s ease;
+}
+
+.evidence-count:hover {
+    color: var(--primary);
+}
+
+.tag-item {
+    transition: all 0.3s ease;
+}
+
+.tag-item:hover {
+    transform: scale(1.05);
+    background-color: var(--primary);
+    color: white;
+}
+
+.action-button {
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.risk-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .case-card {
+        margin-bottom: 16px;
+    }
+    
+    .action-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}

@@ -1,0 +1,46 @@
+/* QR Poster Generator Styles */
+.poster-template {
+    transition: all 0.3s ease;
+}
+
+.poster-template:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.template-preview {
+    transition: all 0.3s ease;
+}
+
+.template-preview:hover {
+    border-color: var(--primary);
+}
+
+.staff-preview {
+    transition: all 0.3s ease;
+}
+
+.staff-preview:hover {
+    background-color: rgba(147, 51, 234, 0.02);
+}
+
+.generation-button {
+    transition: all 0.3s ease;
+}
+
+.generation-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .poster-template {
+        margin-bottom: 16px;
+    }
+    
+    .generation-button {
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+}

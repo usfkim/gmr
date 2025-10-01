@@ -1,0 +1,714 @@
+<div class="bg-white">
+    <!-- Header Navigation -->
+    <app-header />
+    <!-- Hero Section -->
+    <section class="bg-gray-50 py-10">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Healthcare Practitioner Verification
+                    Portal</h1>
+                <p class="text-lg text-gray-600 mb-8">Verify the credentials and licensing status of healthcare
+                    professionals registered in the Uganda Medical Registry</p>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb -->
+    <div class="bg-white py-3 border-b">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center text-sm text-gray-600">
+                <a routerLink="/home"
+                    data-readdy="true" class="hover:text-primary transition">Home</a>
+                <i class="ri-arrow-right-s-line mx-2"></i>
+                <span class="text-gray-800 font-medium">Verification Portal</span>
+            </div>
+        </div>
+    </div>
+    <!-- Verification Tabs Section -->
+    <section class="py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <!-- License Search Tab Content -->
+                    <div id="licenseContent" class="tab-content active p-6 md:p-8">
+                        <div class="mb-6">
+                            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Verify Practitioner by License</h2>
+                            <p class="text-gray-600">Enter a practitioner's license number to verify their
+                                credentials and current status.</p>
+                        </div>
+                        <form id="verificationForm">
+                            <div class="mb-6">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="text-sm font-medium text-gray-700">Search by License Number</span>
+                                    </div>
+                                </div>
+                                <div id="licenseSearchContainer">
+                                    <label for="licenseNumber"
+                                        class="block text-sm font-medium text-gray-700 mb-2">License Number</label>
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="ri-file-list-3-line text-gray-400"></i>
+                                        </div>
+                                        <input type="text" id="licenseNumber" name="licenseNumber"
+                                            class="verification-input block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm"
+                                            placeholder="Enter license number (e.g., UMC-UG-2458)" #licenseInput>
+                                    </div>
+                                </div>
+                                <div id="nameSearchContainer" class="hidden">
+                                    <label for="practitionerName"
+                                        class="block text-sm font-medium text-gray-700 mb-2">Practitioner Name</label>
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <i class="ri-user-line text-gray-400"></i>
+                                        </div>
+                                        <input type="text" id="practitionerName" name="practitionerName"
+                                            class="verification-input block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm"
+                                            placeholder="Enter full name (e.g., Dr. Yusuf AbdulHakim)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col sm:flex-row sm:justify-between gap-4">
+                                <button type="submit" (click)="performQuickVerification()"
+                                    class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition font-medium flex items-center justify-center">
+                                    <i class="ri-search-line mr-2"></i>
+                                    Quick Verify
+                                </button>
+                                <button type="reset"
+                                    class="text-gray-600 px-6 py-3 border border-gray-300 !rounded-button whitespace-nowrap hover:bg-gray-50 transition font-medium flex items-center justify-center">
+                                    <i class="ri-refresh-line mr-2"></i>
+                                    Clear
+                                </button>
+                            </div>
+                        </form>
+        
+        <!-- Quick Verification Results -->
+        <div id="quickVerificationResults" class="mt-8" *ngIf="quickVerificationResult">
+            <h3 class="text-lg font-medium text-gray-800 mb-4">Quick Verification Result</h3>
+            <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                <div class="p-6" [ngClass]="quickVerificationResult.verified ? 'border-b border-gray-200 bg-green-50' : 'bg-red-50'">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-12 h-12 rounded-full flex items-center justify-center mr-4"
+                                 [ngClass]="quickVerificationResult.verified ? 'bg-green-100' : 'bg-red-100'">
+                                <i [ngClass]="quickVerificationResult.verified ? 'ri-verified-badge-fill text-green-600' : 'ri-close-circle-fill text-red-600'" class="ri-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-800">
+                                    {{ quickVerificationResult.verified ? 'License Verified ✅' : 'License Not Found ❌' }}
+                                </h4>
+                                <p class="text-sm text-gray-600">
+                                    {{ quickVerificationResult.message }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sign in prompt for full details -->
+                <div class="p-6" *ngIf="quickVerificationResult.verified">
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <div class="flex items-start">
+                            <i class="ri-information-line text-blue-600 ri-lg mt-0.5 mr-3"></i>
+                            <div>
+                                <h5 class="font-medium text-blue-900 mb-1">Sign in for Full Details</h5>
+                                <p class="text-sm text-blue-700 mb-3">
+                                    To view complete practitioner information including photo, specialties, and contact details, please sign in to your account.
+                                </p>
+                                <div class="flex flex-wrap gap-3">
+                                    <button (click)="signInWithGoogle()" 
+                                            class="bg-white text-gray-700 border border-gray-300 px-4 py-2 rounded-lg hover:bg-gray-50 transition flex items-center text-sm">
+                                        <i class="ri-google-fill mr-2 text-red-500"></i>
+                                        Sign in with Google
+                                    </button>
+                                    <button (click)="signInWithLinkedIn()"
+                                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center text-sm">
+                                        <i class="ri-linkedin-fill mr-2"></i>
+                                        Sign in with LinkedIn
+                                    </button>
+                                    <a routerLink="/login"
+                                       class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center text-sm">
+                                        <i class="ri-user-line mr-2"></i>
+                                        Sign in with Account
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Basic verified info (limited) -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500 mb-1">License Number</h4>
+                            <p class="text-base text-gray-800">{{ quickVerificationResult.licenseNumber }}</p>
+                        </div>
+                        <div>
+                            <h4 class="text-sm font-medium text-gray-500 mb-1">Status</h4>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                Active License
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+                        <div class="mt-8">
+                            <h3 class="text-lg font-medium text-gray-800 mb-4">Recent Searches</h3>
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="space-y-3">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <i class="ri-history-line text-gray-400 mr-3"></i>
+                                                    <span class="text-sm text-gray-700">UMC-UG-2458 - Dr. Yusuf AbdulHakim
+                                                </span>
+                                        </div>
+                                        <button class="text-primary hover:text-blue-700 text-sm font-medium">Search
+                                            Again</button>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <i class="ri-history-line text-gray-400 mr-3"></i>
+                                            <span class="text-sm text-gray-700">NMC-UG-5721 - Nurse Akandwanaho Richard</span>
+                                        </div>
+                                        <button class="text-primary hover:text-blue-700 text-sm font-medium">Search
+                                            Again</button>
+                                    </div>
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <i class="ri-history-line text-gray-400 mr-3"></i>
+                                            <span class="text-sm text-gray-700">UMC-UG-3126 - Dr. Amjad Musisi</span>
+                                        </div>
+                                        <button class="text-primary hover:text-blue-700 text-sm font-medium">Search
+                                            Again</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Verification Results (Initially Hidden) -->
+                        <div id="verificationResults" class="mt-8 hidden">
+                            <h3 class="text-lg font-medium text-gray-800 mb-4">Verification Results</h3>
+                            <div class="bg-white border border-gray-200 rounded-lg shadow-sm overflow-hidden">
+                                <div class="p-6 border-b border-gray-200 bg-green-50">
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center">
+                                            <div
+                                                class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
+                                                <i class="ri-verified-badge-fill text-green-600 ri-lg"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-lg font-semibold text-gray-800">Verified Practitioner
+                                                </h4>
+                                                <p class="text-sm text-gray-600">This practitioner is registered and
+                                                    licensed with the Uganda Medical Registry</p>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <span
+                                                class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                                Active License
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-6">
+                                    <div class="flex flex-col md:flex-row">
+                                        <div class="md:w-1/3 mb-6 md:mb-0 md:pr-6">
+                                            <div
+                                                class="w-40 h-40 rounded-full overflow-hidden mx-auto bg-gray-200 border-4 border-primary">
+                                                <img src="https://readdy.ai/api/search-image?query=professional%252520portrait%252520of%252520African%252520male%252520doctor%252520in%252520formal%252520attire%252520with%252520stethoscope%25252C%252520confident%252520pose%25252C%252520neutral%252520background%25252C%252520well-groomed%25252C%252520professional%252520lighting%25252C%252520high%252520quality%252520professional%252520headshot%252520of%252520Ugandan%252520medical%252520doctor%25252C%252520serious%252520expression&width=200&height=200&seq=doc1&orientation=squarish"
+                                                    alt="Dr. Yusuf AbdulHakim"
+                                                    class="w-full h-full object-cover object-top">
+                                            </div>
+                                        </div>
+                                        <div class="md:w-2/3">
+                                            <h3 class="text-2xl font-semibold text-gray-800 mb-2">Dr. Yusuf AbdulHakim
+                                                Addo</h3>
+                                            <p class="text-primary font-medium mb-4">Cardiologist</p>
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                                <div>
+                                                    <h4 class="text-sm font-medium text-gray-500 mb-1">License Number
+                                                    </h4>
+                                                    <p class="text-base text-gray-800">UMC-UG-2458</p>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-sm font-medium text-gray-500 mb-1">License Status
+                                                    </h4>
+                                                    <p class="text-base text-green-600 font-medium">Active</p>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-sm font-medium text-gray-500 mb-1">License Type</h4>
+                                                    <p class="text-base text-gray-800">Medical Doctor</p>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-sm font-medium text-gray-500 mb-1">Expiration Date
+                                                    </h4>
+                                                    <p class="text-base text-gray-800">December 31, 2025</p>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-sm font-medium text-gray-500 mb-1">Primary Practice
+                                                    </h4>
+                                                    <p class="text-base text-gray-800">Mulago National Referral Hospital</p>
+                                                </div>
+                                                <div>
+                                                    <h4 class="text-sm font-medium text-gray-500 mb-1">Region</h4>
+                                                    <p class="text-base text-gray-800">Central Region (Kampala)</p>
+                                                </div>
+                                            </div>
+                                            <div class="border-t border-gray-200 pt-4">
+                                                <h4 class="text-sm font-medium text-gray-500 mb-2">Specialties</h4>
+                                                <div class="flex flex-wrap gap-2">
+                                                    <span
+                                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        Cardiology
+                                                    </span>
+                                                    <span
+                                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        Internal Medicine
+                                                    </span>
+                                                    <span
+                                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                        Interventional Cardiology
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="p-4 bg-gray-50 border-t border-gray-200">
+                                        <div class="flex flex-wrap items-center justify-between gap-4">
+                                            <div class="text-sm text-gray-500">
+                                                <span>Verification Timestamp: May 29, 2025 at 10:23 AM</span>
+                                            </div>
+                                            <div class="flex space-x-3">
+                                                <button
+                                                    class="text-primary hover:text-blue-700 text-sm font-medium flex items-center">
+                                                    <i class="ri-printer-line mr-1"></i> Print
+                                                </button>
+                                                <button
+                                                    class="text-primary hover:text-blue-700 text-sm font-medium flex items-center">
+                                                    <i class="ri-download-line mr-1"></i> Download
+                                                </button>
+                                                <button
+                                                    class="text-primary hover:text-blue-700 text-sm font-medium flex items-center">
+                                                    <i class="ri-share-line mr-1"></i> Share
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- QR Code Scanner Tab Content -->
+                        <div id="qrContent" class="tab-content p-6 md:p-8">
+                            <div class="mb-6">
+                                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Verify Practitioner by QR Code
+                                </h2>
+                                <p class="text-gray-600">Scan a practitioner's QR code to instantly verify their
+                                    credentials and current status.</p>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div>
+                                    <div class="qr-scanner-container mb-4">
+                                        <div class="qr-scanner-overlay">
+                                            <div class="qr-scanner-frame"></div>
+                                            <p class="text-gray-500 mt-4">Position the QR code within the frame</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-center mb-6">
+                                        <button id="startScanButton"
+                                            class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition font-medium flex items-center justify-center">
+                                            <i class="ri-camera-line mr-2"></i>
+                                            Start Camera Scan
+                                        </button>
+                                    </div>
+                                    <div class="text-center">
+                                        <p class="text-sm text-gray-500 mb-4">Or upload a QR code image</p>
+                                        <label for="qrUpload"
+                                            class="inline-block bg-white text-primary border border-primary px-6 py-3 !rounded-button whitespace-nowrap hover:bg-gray-50 transition font-medium cursor-pointer">
+                                            <i class="ri-upload-2-line mr-2"></i>
+                                            Upload QR Image
+                                        </label>
+                                        <input type="file" id="qrUpload" class="hidden" accept="image/*">
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 rounded-lg p-6">
+                                    <h3 class="text-lg font-medium text-gray-800 mb-4">How QR Verification Works</h3>
+                                    <ol class="space-y-4">
+                                        <li class="flex">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                                <span class="text-xs font-bold">1</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">Healthcare practitioners have unique QR codes
+                                                    on their ID cards and digital profiles</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                                <span class="text-xs font-bold">2</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">Scan the QR code using your device's camera or
+                                                    upload an image of the QR code</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                                <span class="text-xs font-bold">3</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">The system instantly verifies the
+                                                    practitioner's credentials against our secure database</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                                <span class="text-xs font-bold">4</span>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">View the practitioner's current license status
+                                                    and professional information</p>
+                                            </div>
+                                        </li>
+                                    </ol>
+                                    <div class="mt-6 pt-4 border-t border-gray-200">
+                                        <div class="flex items-start">
+                                            <i class="ri-information-line text-primary ri-lg mt-0.5 mr-3"></i>
+                                            <p class="text-sm text-gray-600">QR verification provides real-time status
+                                                information and is the most secure way to verify a practitioner's
+                                                credentials.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Manual Code Entry -->
+                            <div class="mt-8 border-t border-gray-200 pt-6">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">Manual QR Code Entry</h3>
+                                <p class="text-gray-600 mb-4">If you have the alphanumeric code from a practitioner's QR
+                                    code, you can enter it manually below.</p>
+                                <form id="manualCodeForm" class="flex flex-col sm:flex-row gap-4">
+                                    <div class="flex-grow">
+                                        <div class="relative">
+                                            <div
+                                                class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                                <i class="ri-qr-code-line text-gray-400"></i>
+                                            </div>
+                                            <input type="text" id="manualCode" name="manualCode"
+                                                class="verification-input block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary text-sm"
+                                                placeholder="Enter QR code (e.g., UMR-V-MDC2458)">
+                                        </div>
+                                    </div>
+                                    <button type="submit"
+                                        class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition font-medium flex items-center justify-center">
+                                        <i class="ri-search-line mr-2"></i>
+                                        Verify Code
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Bulk Verification Section -->
+    <section class="py-10 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-2">Bulk Verification</h2>
+                        <p class="text-gray-600">For healthcare institutions and employers needing to verify multiple
+                            practitioners</p>
+                    </div>
+                    <a href="#"
+                        class="mt-4 md:mt-0 bg-white text-primary border border-primary px-6 py-3 !rounded-button whitespace-nowrap hover:bg-gray-50 transition font-medium flex items-center justify-center">
+                        <i class="ri-login-box-line mr-2"></i>
+                        Login to Access
+                    </a>
+                </div>
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="p-6 md:p-8">
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 flex items-center justify-center bg-blue-100 rounded-full mr-4 flex-shrink-0">
+                                <i class="ri-file-list-3-line text-primary ri-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-medium text-gray-800 mb-2">Institutional Verification Services
+                                </h3>
+                                <p class="text-gray-600 mb-4">Our bulk verification service allows authorized healthcare
+                                    institutions, hospitals, clinics, and employers to verify multiple practitioners
+                                    simultaneously.</p>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-gray-50 p-4 rounded-md">
+                                        <h4 class="font-medium text-gray-800 mb-2">Features</h4>
+                                        <ul class="space-y-2">
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-600 mr-2 mt-0.5"></i>
+                                                <span class="text-sm text-gray-700">Upload CSV files with multiple
+                                                    license numbers</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-600 mr-2 mt-0.5"></i>
+                                                <span class="text-sm text-gray-700">Batch process up to 500
+                                                    verifications at once</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-600 mr-2 mt-0.5"></i>
+                                                <span class="text-sm text-gray-700">Download comprehensive verification
+                                                    reports</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-check-line text-green-600 mr-2 mt-0.5"></i>
+                                                <span class="text-sm text-gray-700">Automated monthly verification
+                                                    checks</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-gray-50 p-4 rounded-md">
+                                        <h4 class="font-medium text-gray-800 mb-2">Who Can Access</h4>
+                                        <ul class="space-y-2">
+                                            <li class="flex items-start">
+                                                <i class="ri-hospital-line text-primary mr-2 mt-0.5"></i>
+                                                <span class="text-sm text-gray-700">Hospitals and healthcare
+                                                    facilities</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-government-line text-primary mr-2 mt-0.5"></i>
+                                                <span class="text-sm text-gray-700">Government healthcare
+                                                    agencies</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-building-4-line text-primary mr-2 mt-0.5"></i>
+                                                <span class="text-sm text-gray-700">Healthcare employers and
+                                                    recruiters</span>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="ri-shield-check-line text-primary mr-2 mt-0.5"></i>
+                                                <span class="text-sm text-gray-700">Insurance providers and
+                                                    credentialing services</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-6 pt-4 border-t border-gray-200">
+                                    <p class="text-sm text-gray-600">To request access to our bulk verification service,
+                                        please <a href="#" class="text-primary hover:underline">contact our verification
+                                            department</a> or call +233 30 290 1234.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Verification Process Section -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-2xl font-semibold text-gray-800 text-center mb-10">Our Verification Process</h2>
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="bg-gray-50 p-6 rounded-lg text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-search-line text-primary ri-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-800 mb-2">1. Data Collection</h3>
+                            <p class="text-sm text-gray-600">We collect and maintain up-to-date information from all
+                            healthcare regulatory bodies in Uganda.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-shield-check-line text-primary ri-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-800 mb-2">2. Verification</h3>
+                        <p class="text-sm text-gray-600">We verify credentials with issuing institutions and
+                            cross-reference with regulatory bodies.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-refresh-line text-primary ri-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-800 mb-2">3. Regular Updates</h3>
+                        <p class="text-sm text-gray-600">Our database is updated daily with new registrations, renewals,
+                            and status changes.</p>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg text-center">
+                        <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-secure-payment-line text-primary ri-xl"></i>
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-800 mb-2">4. Secure Access</h3>
+                        <p class="text-sm text-gray-600">We provide secure, real-time access to verification data
+                            through multiple channels.</p>
+                    </div>
+                </div>
+                <div class="mt-12 bg-gray-50 rounded-lg p-6">
+                    <h3 class="text-lg font-medium text-gray-800 mb-4">Understanding Verification Status</h3>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <span
+                                        class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 mr-3 mt-0.5">Active</span>
+                                    <div>
+                                        <h4 class="text-base font-medium text-gray-800">Active License</h4>
+                                        <p class="text-sm text-gray-600">The practitioner's license is current and
+                                            valid. They are authorized to practice within their scope.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span
+                                        class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 mr-3 mt-0.5">Provisional</span>
+                                    <div>
+                                        <h4 class="text-base font-medium text-gray-800">Provisional License</h4>
+                                        <p class="text-sm text-gray-600">The practitioner has a temporary license,
+                                            typically issued to new graduates or those completing requirements.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="space-y-4">
+                                <div class="flex items-start">
+                                    <span
+                                        class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 mr-3 mt-0.5">Suspended</span>
+                                    <div>
+                                        <h4 class="text-base font-medium text-gray-800">Suspended License</h4>
+                                        <p class="text-sm text-gray-600">The practitioner's license has been temporarily
+                                            suspended. They are not authorized to practice.</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start">
+                                    <span
+                                        class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 mr-3 mt-0.5">Expired</span>
+                                    <div>
+                                        <h4 class="text-base font-medium text-gray-800">Expired License</h4>
+                                        <p class="text-sm text-gray-600">The practitioner's license has expired and
+                                            needs renewal. They are not authorized to practice.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FAQ Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <h2 class="text-2xl font-semibold text-gray-800 text-center mb-10">Frequently Asked Questions</h2>
+                <div class="space-y-6">
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <button
+                            class="faq-button w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                            <span class="text-lg font-medium text-gray-800">How accurate is the verification
+                                information?</span>
+                            <i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden">
+                            <p class="text-gray-600">Our verification data is sourced directly from Uganda's official
+                                healthcare regulatory bodies including the Medical and Dental Council, Nurses and
+                                Midwives Council, Traditional Medicine Practice Council, and Allied Health Professions
+                                Council. The database is updated daily, ensuring the highest level of accuracy. However,
+                                there may be a short processing delay (typically 24-48 hours) between a status change
+                                and its reflection in our system.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <button
+                            class="faq-button w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                            <span class="text-lg font-medium text-gray-800">What information is provided in a
+                                verification check?</span>
+                            <i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden">
+                            <p class="text-gray-600">A standard verification check includes the practitioner's name,
+                                license number, license type, current status (active, provisional, suspended, or
+                                expired), specialty/practice areas, and license expiration date. For institutional users
+                                with proper authorization, additional information such as educational background,
+                                training history, and disciplinary records may be available.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <button
+                            class="faq-button w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                            <span class="text-lg font-medium text-gray-800">How do I access the bulk verification
+                                service?</span>
+                            <i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden">
+                            <p class="text-gray-600">The bulk verification service is available to authorized healthcare
+                                institutions, hospitals, clinics, government agencies, and employers. To request access,
+                                you need to submit an application with your organization's details and proof of
+                                legitimate need for bulk verification. Once approved, you'll receive secure login
+                                credentials to access the institutional portal. For more information, please contact our
+                                verification department at {{'verification@ghanamedicalregistry.com'}} or call +233 30
+                                290
+                                1234.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <button
+                            class="faq-button w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                            <span class="text-lg font-medium text-gray-800">What should I do if I find incorrect
+                                information?</span>
+                            <i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden">
+                            <p class="text-gray-600">If you believe there is incorrect information in a verification
+                                result, please use the "Report Discrepancy" button on the verification results page.
+                                Provide as much detail as possible about the suspected error. Our verification team will
+                                investigate the issue and make any necessary corrections within 3-5 business days. For
+                                urgent matters, please contact our support team directly.</p>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+                        <button
+                            class="faq-button w-full px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                            <span class="text-lg font-medium text-gray-800">Is there a limit to how many verifications I
+                                can perform?</span>
+                            <i class="ri-arrow-down-s-line text-gray-500 faq-icon"></i>
+                        </button>
+                        <div class="faq-content px-6 pb-4 hidden">
+                            <p class="text-gray-600">For public users, there is a daily limit of 10 individual
+                                verifications per IP address to prevent system abuse. Institutional users with
+                                authorized access to the bulk verification service have higher limits based on their
+                                subscription level, ranging from 100 to 500 verifications per day. If you need to
+                                perform more verifications, please contact our support team to discuss your
+                                requirements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Call to Action -->
+    <section class="py-12 bg-primary">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">Institutional Verification Services</h2>
+            <p class="text-lg text-white opacity-90 max-w-3xl mx-auto mb-8">Access our comprehensive verification tools
+                designed for healthcare institutions and employers</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#"
+                    class="bg-white text-primary px-6 py-3 !rounded-button whitespace-nowrap hover:bg-gray-100 transition font-medium">
+                    Request Institutional Access
+                </a>
+                <a href="https://readdy.ai/home/ee672baf-3a93-4caf-bac7-4d087093932e/efe9a2fb-aecf-40e2-a058-8b4220700e1a"
+                    data-readdy="true"
+                    class="bg-transparent text-white border border-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-white/10 transition font-medium">
+                    Search Practitioners
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+     <app-footer/>
+</div>

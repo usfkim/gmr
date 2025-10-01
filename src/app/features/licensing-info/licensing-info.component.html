@@ -1,0 +1,966 @@
+<div class="bg-white">
+    <!-- Header Navigation -->
+    <app-header />
+    <!-- Hero Section -->
+    <section class="bg-gray-50 py-10">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Medical Licensing in Uganda</h1>
+                <p class="text-lg text-gray-600 mb-8">Comprehensive information about licensing requirements,
+                    application processes, and regulations for healthcare practitioners in Uganda.</p>
+                <div class="flex flex-wrap gap-4">
+                    <a href=""
+                        class="bg-primary text-white px-5 py-2.5 !rounded-button whitespace-nowrap hover:bg-blue-700 transition">View
+                        Requirements</a>
+                    <a href=""
+                        class="bg-white text-primary border border-primary px-5 py-2.5 !rounded-button whitespace-nowrap hover:bg-gray-50 transition">Application
+                        Process</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb -->
+    <div class="bg-white py-3 border-b">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center text-sm text-gray-600">
+                <a routerLink="/home" data-readdy="true" class="hover:text-primary transition">Home</a>
+                <i class="ri-arrow-right-s-line mx-2"></i>
+                <span class="text-gray-800 font-medium">Licensing Information</span>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content Section -->
+    <section class="py-10 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="max-w-5xl mx-auto">
+                <!-- Back to Verification Portal Link -->
+                <div class="mb-8">
+                    <a [routerLink]="['/verification-portal']" data-readdy="true"
+                        class="inline-flex items-center text-primary hover:underline">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Back to Verification Portal
+                    </a>
+                </div>
+                <!-- Practitioner Type Tabs -->
+                <div class="mb-8">
+                    <div class="border-b border-gray-200">
+                        <div class="flex overflow-x-auto">
+                            <button *ngFor="let tab of tabs" class="custom-tab py-3 px-6 font-medium" 
+                            [ngClass]="{'text-primary active': selectedTab === tab.value,'text-gray-600 hover:text-primary': selectedTab !== tab.value}" (click)="selectTab(tab.value)">
+                                {{ tab.label }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Tab Content -->
+                <div *ngIf="selectedTab === 'doctors'">
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="ri-stethoscope-line text-primary ri-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-800 mb-2">Medical Doctors Licensing</h2>
+                                <p class="text-gray-600">The Uganda Medical Council (UMC) is responsible
+                                    for regulating the practice of medicine, dentistry, and physician assistantship in
+                                    Uganda. All medical practitioners must be registered and licensed by the UMC to
+                                    legally practice in Uganda.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Licensing Requirements Section -->
+                    <div id="requirements" class="mb-12">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Licensing Requirements</h2>
+                        <div class="space-y-4">
+                            <!-- Education Requirements -->
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button (click)="toggle(1)"
+                                    class="accordion-button w-full bg-white px-6 py-4 flex items-center justify-between focus:outline-none">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                                            <i class="ri-graduation-cap-line text-primary"></i>
+                                        </div>
+                                        <span class="text-lg font-medium text-gray-800">Educational Requirements</span>
+                                    </div>
+                                    <i [ngClass]="{ 'rotate-180': active === 1 }" class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="px-6 pb-4" *ngIf="active === 1">
+                                    <div class="pt-2 pl-11">
+                                        <p class="text-gray-600 mb-4">To qualify for medical licensing in Uganda,
+                                            applicants must have:</p>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>A medical degree (MBChB, MBBS, MD) from a recognized medical school</li>
+                                            <li>Completed a mandatory housemanship (internship) program at an approved
+                                                health facility in Uganda</li>
+                                            <li>For foreign-trained doctors: Verification of medical credentials and
+                                                passing the MDC's registration examination</li>
+                                            <li>For specialists: Completion of postgraduate training and certification
+                                                from recognized institutions</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Documentation Requirements -->
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button (click)="toggle(2)"
+                                    class="accordion-button w-full bg-white px-6 py-4 flex items-center justify-between focus:outline-none">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                                            <i class="ri-file-list-3-line text-primary"></i>
+                                        </div>
+                                        <span class="text-lg font-medium text-gray-800">Required Documentation</span>
+                                    </div>
+                                    <i [ngClass]="{ 'rotate-180': active === 2 }" class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="px-6 pb-4" *ngIf="active === 2">
+                                    <div class="pt-2 pl-11">
+                                        <p class="text-gray-600 mb-4">The following documents are required for medical
+                                            licensing:</p>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>Original medical degree certificate and academic transcripts</li>
+                                            <li>Certificate of completion of housemanship/internship</li>
+                                            <li>Certificate of good standing from previous licensing authority (for
+                                                foreign-trained doctors)</li>
+                                            <li>Valid identification (National ID, Passport)</li>
+                                            <li>Proof of Ugandan citizenship or work permit for non-Ugandans</li>
+                                            <li>Recent passport-sized photographs</li>
+                                            <li>Certificate of registration with the Uganda Medical Association
+                                                (recommended)</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Professional Qualifications -->
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button (click)="toggle(3)"
+                                    class="accordion-button w-full bg-white px-6 py-4 flex items-center justify-between focus:outline-none">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                                            <i class="ri-award-line text-primary"></i>
+                                        </div>
+                                        <span class="text-lg font-medium text-gray-800">Professional
+                                            Qualifications</span>
+                                    </div>
+                                    <i [ngClass]="{ 'rotate-180': active === 3 }" class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="px-6 pb-4" *ngIf="active === 3">
+                                    <div class="pt-2 pl-11">
+                                        <p class="text-gray-600 mb-4">Professional qualifications required for different
+                                            categories:</p>
+                                        <h4 class="font-medium text-gray-800 mt-4 mb-2">General Practitioners</h4>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>Basic medical degree and completed housemanship</li>
+                                            <li>Passing the MDC's registration examination (if applicable)</li>
+                                        </ul>
+                                        <h4 class="font-medium text-gray-800 mt-4 mb-2">Specialists</h4>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>Fellowship or membership of Uganda College of Physicians and Surgeons
+                                            </li>
+                                            <li>OR equivalent qualification from recognized international bodies (e.g.,
+                                                FRCPS, FRCS, American Board certification)</li>
+                                            <li>Minimum of 3-7 years of postgraduate training depending on specialty
+                                            </li>
+                                        </ul>
+                                        <h4 class="font-medium text-gray-800 mt-4 mb-2">Foreign-Trained Doctors</h4>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>Verification of credentials through Primary Source Verification</li>
+                                            <li>Passing the MDC's registration examination</li>
+                                            <li>Completion of 6-12 months of supervised clinical practice in Uganda</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Registration Process -->
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button (click)="toggle(4)"
+                                    class="accordion-button w-full bg-white px-6 py-4 flex items-center justify-between focus:outline-none">
+                                    <div class="flex items-center">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-blue-100 rounded-full mr-3">
+                                            <i class="ri-clipboard-line text-primary"></i>
+                                        </div>
+                                        <span class="text-lg font-medium text-gray-800">Registration Process</span>
+                                    </div>
+                                    <i [ngClass]="{ 'rotate-180': active === 4 }" class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="px-6 pb-4" *ngIf="active === 4">
+                                    <div class="pt-2 pl-11">
+                                        <p class="text-gray-600 mb-4">The registration process involves several stages:
+                                        </p>
+                                        <h4 class="font-medium text-gray-800 mt-4 mb-2">Provisional Registration</h4>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>Required for new graduates to undertake housemanship</li>
+                                            <li>Valid for the duration of housemanship (typically 2 years)</li>
+                                            <li>Limited to practice under supervision in approved institutions</li>
+                                        </ul>
+                                        <h4 class="font-medium text-gray-800 mt-4 mb-2">Temporary Registration</h4>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>For foreign doctors coming to Uganda for short-term work</li>
+                                            <li>Valid for up to 3 months (renewable)</li>
+                                            <li>Limited to specific institution and purpose</li>
+                                        </ul>
+                                        <h4 class="font-medium text-gray-800 mt-4 mb-2">Full Registration</h4>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>Granted after successful completion of housemanship</li>
+                                            <li>Allows independent practice within scope of training</li>
+                                            <li>Requires annual renewal</li>
+                                        </ul>
+                                        <h4 class="font-medium text-gray-800 mt-4 mb-2">Specialist Registration</h4>
+                                        <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                                            <li>Additional registration for qualified specialists</li>
+                                            <li>Requires proof of specialist qualification</li>
+                                            <li>Listed in the specialist register</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Application Process Section -->
+                    <div id="application" class="mb-12">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Application Process</h2>
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <div class="space-y-8">
+                                <!-- Step 1 -->
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full font-semibold">
+                                            1</div>
+                                        <div class="h-full w-0.5 bg-gray-200 mx-auto mt-2"></div>
+                                    </div>
+                                    <div class="ml-6">
+                                        <h3 class="text-lg font-medium text-gray-800 mb-2">Online Application Submission
+                                        </h3>
+                                        <p class="text-gray-600 mb-4">Complete and submit the online application form
+                                            through the MDC portal.</p>
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <ul class="space-y-2">
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Create an account on the MDC online
+                                                        portal</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Fill out the application form with
+                                                        personal and professional details</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Upload scanned copies of required
+                                                        documents</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Pay the application processing fee
+                                                        online</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-sm text-gray-500">Estimated Time: 1-2 hours</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Step 2 -->
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full font-semibold">
+                                            2</div>
+                                        <div class="h-full w-0.5 bg-gray-200 mx-auto mt-2"></div>
+                                    </div>
+                                    <div class="ml-6">
+                                        <h3 class="text-lg font-medium text-gray-800 mb-2">Document Verification</h3>
+                                        <p class="text-gray-600 mb-4">The MDC verifies all submitted documents and
+                                            credentials.</p>
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <ul class="space-y-2">
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">MDC reviews all submitted
+                                                        documents</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Primary source verification of medical
+                                                        degree and credentials</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Verification of housemanship
+                                                        completion</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Background checks for professional
+                                                        misconduct</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-sm text-gray-500">Estimated Time: 2-4 weeks</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Step 3 -->
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full font-semibold">
+                                            3</div>
+                                        <div class="h-full w-0.5 bg-gray-200 mx-auto mt-2"></div>
+                                    </div>
+                                    <div class="ml-6">
+                                        <h3 class="text-lg font-medium text-gray-800 mb-2">Registration Examination (if
+                                            applicable)</h3>
+                                        <p class="text-gray-600 mb-4">Foreign-trained doctors must pass the MDC
+                                            registration examination.</p>
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <ul class="space-y-2">
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Schedule examination date through the
+                                                        MDC portal</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Pay examination fee</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Complete written examination</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Complete clinical skills
+                                                        assessment</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-sm text-gray-500">Estimated Time: 1-2 days for exam, 2-3
+                                                weeks for results</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Step 4 -->
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full font-semibold">
+                                            4</div>
+                                        <div class="h-full w-0.5 bg-gray-200 mx-auto mt-2"></div>
+                                    </div>
+                                    <div class="ml-6">
+                                        <h3 class="text-lg font-medium text-gray-800 mb-2">Interview and Oath Taking
+                                        </h3>
+                                        <p class="text-gray-600 mb-4">Successful applicants attend an interview and take
+                                            the medical oath.</p>
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <ul class="space-y-2">
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Schedule interview appointment</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Attend in-person interview with the MDC
+                                                        board</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Take the Hippocratic Oath or Physician's
+                                                        Pledge</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Receive orientation on professional
+                                                        ethics and regulations</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-sm text-gray-500">Estimated Time: 1 day</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Step 5 -->
+                                <div class="flex">
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-full font-semibold">
+                                            5</div>
+                                    </div>
+                                    <div class="ml-6">
+                                        <h3 class="text-lg font-medium text-gray-800 mb-2">License Issuance</h3>
+                                        <p class="text-gray-600 mb-4">Pay registration fee and receive your medical
+                                            license.</p>
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <ul class="space-y-2">
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Pay the registration fee</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Receive license certificate and
+                                                        registration number</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Obtain practitioner ID card</span>
+                                                </li>
+                                                <li class="flex items-start">
+                                                    <i class="ri-check-line text-green-600 ri-lg mt-0.5 mr-2"></i>
+                                                    <span class="text-gray-700">Entry into the Uganda Medical Registry
+                                                        database</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-sm text-gray-500">Estimated Time: 1-2 weeks</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <h4 class="font-medium text-gray-800 mb-3">Overall Process Timeline</h4>
+                                <div class="mb-2 flex justify-between text-sm">
+                                    <span class="text-gray-600">Estimated Total Time:</span>
+                                    <span class="font-medium text-gray-800">4-8 weeks</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-bar-fill" style="width: 100%;"></div>
+                                </div>
+                                <div class="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <i class="ri-information-line text-yellow-500 ri-lg mt-1"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h3 class="text-sm font-medium text-yellow-800">Important Note</h3>
+                                            <div class="mt-2 text-sm text-yellow-700">
+                                                <p>Processing times may vary based on application volume, document
+                                                    verification complexity, and examination schedules. Foreign-trained
+                                                    doctors typically experience longer processing times due to
+                                                    additional verification requirements.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- License Renewal Section -->
+                    <div class="mb-12">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">License Renewal</h2>
+                        <div class="bg-white border border-gray-200 rounded-lg p-6">
+                            <p class="text-gray-600 mb-6">Medical licenses in Uganda must be renewed annually. The
+                                renewal process ensures that practitioners maintain their professional standards and
+                                continue their professional development.</p>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-800 mb-4">Renewal Requirements</h3>
+                                    <ul class="space-y-3">
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                                                <i class="ri-time-line text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">Renewal application submitted at least 30 days
+                                                    before expiration</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                                                <i class="ri-money-dollar-circle-line text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">Payment of annual renewal fee</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                                                <i class="ri-book-read-line text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">Proof of completed Continuing Professional
+                                                    Development (CPD) credits</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                                                <i class="ri-file-list-3-line text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">Updated professional information (if
+                                                    applicable)</p>
+                                            </div>
+                                        </li>
+                                        <li class="flex items-start">
+                                            <div
+                                                class="w-6 h-6 flex items-center justify-center bg-blue-100 rounded-full mr-3 flex-shrink-0">
+                                                <i class="ri-shield-check-line text-primary"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-gray-700">Declaration of good standing and fitness to
+                                                    practice</p>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-medium text-gray-800 mb-4">Continuing Professional
+                                        Development</h3>
+                                    <p class="text-gray-600 mb-4">All licensed medical practitioners must complete a
+                                        minimum number of CPD credits annually:</p>
+                                    <div class="space-y-4">
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="font-medium text-gray-800 mb-2">General Practitioners</h4>
+                                            <p class="text-gray-700">Minimum 30 CPD credits per year</p>
+                                        </div>
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="font-medium text-gray-800 mb-2">Specialists</h4>
+                                            <p class="text-gray-700">Minimum 40 CPD credits per year</p>
+                                        </div>
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="font-medium text-gray-800 mb-2">Approved CPD Activities</h4>
+                                            <ul class="space-y-1 text-gray-700">
+                                                <li>• Conferences and workshops</li>
+                                                <li>• Medical journal publications</li>
+                                                <li>• Online medical courses</li>
+                                                <li>• Clinical audits and research</li>
+                                                <li>• Teaching and mentoring activities</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <h3 class="text-lg font-medium text-gray-800 mb-4">Renewal Process</h3>
+                                <ol class="space-y-4">
+                                    <li class="flex">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                            <span class="text-xs font-bold">1</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-700">Log in to the MDC online portal using your
+                                                registration credentials</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                            <span class="text-xs font-bold">2</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-700">Complete the renewal application form and update
+                                                any personal or professional information</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                            <span class="text-xs font-bold">3</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-700">Upload evidence of completed CPD activities and
+                                                credits</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                            <span class="text-xs font-bold">4</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-700">Pay the renewal fee through the online payment
+                                                system</p>
+                                        </div>
+                                    </li>
+                                    <li class="flex">
+                                        <div
+                                            class="w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full mr-3 flex-shrink-0">
+                                            <span class="text-xs font-bold">5</span>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-700">Receive digital confirmation of renewal and updated
+                                                license certificate</p>
+                                        </div>
+                                    </li>
+                                </ol>
+                                <div class="mt-6 bg-red-50 border border-red-200 rounded-lg p-4">
+                                    <div class="flex">
+                                        <div class="flex-shrink-0">
+                                            <i class="ri-error-warning-line text-red-500 ri-lg mt-1"></i>
+                                        </div>
+                                        <div class="ml-3">
+                                            <h3 class="text-sm font-medium text-red-800">Late Renewal Warning</h3>
+                                            <div class="mt-2 text-sm text-red-700">
+                                                <p>Failure to renew your license before the expiration date will result
+                                                    in a late fee. Practicing with an expired license is illegal and may
+                                                    result in disciplinary action. Licenses expired for more than 3
+                                                    months may require additional reinstatement procedures.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ Section -->
+                    <div class="mb-12">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Frequently Asked Questions</h2>
+                        <div class="space-y-4">
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button
+                                    class="accordion-button w-full bg-white px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                                    <span class="text-lg font-medium text-gray-800">How long does it take to process a
+                                        new medical license application?</span>
+                                    <i class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="accordion-content px-6 pb-4">
+                                    <p class="text-gray-600">For Ugandan-trained doctors who have completed their
+                                        housemanship in Uganda, the process typically takes 4-6 weeks from submission of
+                                        a complete application. For foreign-trained doctors, the process may take 8-12
+                                        weeks due to additional verification requirements and registration examinations.
+                                        Processing times may vary based on application volume and complexity.</p>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button
+                                    class="accordion-button w-full bg-white px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                                    <span class="text-lg font-medium text-gray-800">Can I practice medicine in Uganda
+                                        with a foreign medical license?</span>
+                                    <i class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="accordion-content px-6 pb-4">
+                                    <p class="text-gray-600">No, you cannot practice medicine in Uganda solely with a
+                                        foreign medical license. All medical practitioners, regardless of where they
+                                        obtained their qualifications, must register with the Medical and Dental Council
+                                        of Uganda and obtain a Ugandan medical license. Foreign-trained doctors must
+                                        have their credentials verified and pass the MDC registration examination before
+                                        being granted a license to practice in Uganda.</p>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button
+                                    class="accordion-button w-full bg-white px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                                    <span class="text-lg font-medium text-gray-800">What happens if I fail to complete
+                                        the required CPD credits for renewal?</span>
+                                    <i class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="accordion-content px-6 pb-4">
+                                    <p class="text-gray-600">If you fail to complete the required CPD credits, your
+                                        license renewal may be denied or conditionally approved with a remediation plan.
+                                        For first-time failures, you may be granted a conditional renewal with a
+                                        requirement to complete the missing credits plus additional credits within a
+                                        specified timeframe (usually 3-6 months). Repeated failure to meet CPD
+                                        requirements may result in suspension of your license until the requirements are
+                                        met.</p>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button
+                                    class="accordion-button w-full bg-white px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                                    <span class="text-lg font-medium text-gray-800">How do I verify my foreign medical
+                                        qualifications for registration in Uganda?</span>
+                                    <i class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="accordion-content px-6 pb-4">
+                                    <p class="text-gray-600">Foreign medical qualifications must undergo Primary Source
+                                        Verification (PSV) through the MDC's approved verification service. This
+                                        involves direct verification with the issuing institutions of your medical
+                                        degree, postgraduate training, and previous licensing authorities. You will need
+                                        to submit your credentials to the verification service, pay the verification
+                                        fee, and authorize the release of information. The verification process
+                                        typically takes 4-8 weeks to complete.</p>
+                                </div>
+                            </div>
+                            <div class="border border-gray-200 rounded-lg overflow-hidden">
+                                <button
+                                    class="accordion-button w-full bg-white px-6 py-4 text-left flex items-center justify-between focus:outline-none">
+                                    <span class="text-lg font-medium text-gray-800">What is the difference between
+                                        provisional and full registration?</span>
+                                    <i class="ri-arrow-down-s-line text-gray-500 accordion-icon"></i>
+                                </button>
+                                <div class="accordion-content px-6 pb-4">
+                                    <p class="text-gray-600">Provisional registration is granted to new medical
+                                        graduates to undertake their housemanship (internship) training. It restricts
+                                        practice to approved training institutions under supervision and is valid only
+                                        for the duration of the housemanship (typically 2 years). Full registration is
+                                        granted after successful completion of housemanship and allows independent
+                                        practice within the scope of training. Full registration must be renewed
+                                        annually but does not have the same practice restrictions as provisional
+                                        registration.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Contact Information -->
+                    <div class="mb-12">
+                        <h2 class="text-2xl font-semibold text-gray-800 mb-6">Contact Information</h2>
+                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                            <div class="p-6">
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-800 mb-4">Medical and Dental Council of
+                                            Uganda</h3>
+                                        <ul class="space-y-4">
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-4 flex-shrink-0">
+                                                    <i class="ri-map-pin-line text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">Address</h4>
+                                                    <p class="text-gray-600">Medical and Dental Council<br>
+                                                        P.O. Box MB 585<br>
+                                                        Kampala, Uganda</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-4 flex-shrink-0">
+                                                    <i class="ri-phone-line text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">Phone</h4>
+                                                    <p class="text-gray-600">+256 302 226 360<br>
+                                                        +256 302 226 361</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-4 flex-shrink-0">
+                                                    <i class="ri-mail-line text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">Email</h4>
+                                                    <p class="text-gray-600">{{'info@mdcuganda.org'}}<br>
+                                                        {{'licensing@mdcuganda.org'}}</p>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <div
+                                                    class="w-10 h-10 flex items-center justify-center bg-blue-100 rounded-full mr-4 flex-shrink-0">
+                                                    <i class="ri-global-line text-primary"></i>
+                                                </div>
+                                                <div>
+                                                    <h4 class="font-medium text-gray-700">Website</h4>
+                                                    <p class="text-gray-600">www.mdcuganda.org</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-medium text-gray-800 mb-4">Office Hours & Support</h3>
+                                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                            <h4 class="font-medium text-gray-700 mb-2">Office Hours</h4>
+                                            <ul class="space-y-1 text-gray-600">
+                                                <li>Monday - Friday: 8:00 AM - 5:00 PM</li>
+                                                <li>Saturday: 9:00 AM - 1:00 PM (Licensing Department only)</li>
+                                                <li>Sunday & Public Holidays: Closed</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+                                            <h4 class="font-medium text-gray-700 mb-2">Licensing Department Direct Line
+                                            </h4>
+                                            <p class="text-gray-600">+256 302 226 364</p>
+                                        </div>
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h4 class="font-medium text-gray-700 mb-2">Regional Offices</h4>
+                                            <ul class="space-y-2 text-gray-600">
+                                                <li>
+                                                    <span class="font-medium">Kampala Office:</span><br>
+                                                    Mulago National Referral Hospital<br>
+                                                    +256 414 255 555
+                                                </li>
+                                                <li>
+                                                    <span class="font-medium">Mbarara Office:</span><br>
+                                                    Mbarara Regional Referral Hospital<br>
+                                                    +256 485 420 000
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-8 pt-6 border-t border-gray-200">
+                                    <h3 class="text-lg font-medium text-gray-800 mb-4">Contact Form</h3>
+                                    <form class="grid md:grid-cols-2 gap-4">
+                                        <div>
+                                            <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full
+                                                Name</label>
+                                            <input type="text" id="name" name="name"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                        </div>
+                                        <div>
+                                            <label for="email"
+                                                class="block text-sm font-medium text-gray-700 mb-1">Email
+                                                Address</label>
+                                            <input type="email" id="email" name="email"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                        </div>
+                                        <div>
+                                            <label for="phone"
+                                                class="block text-sm font-medium text-gray-700 mb-1">Phone
+                                                Number</label>
+                                            <input type="tel" id="phone" name="phone"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary">
+                                        </div>
+                                        <div>
+                                            <label for="subject"
+                                                class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                                            <select id="subject" name="subject"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary pr-8">
+                                                <option value="">Select a subject</option>
+                                                <option value="new-license">New License Application</option>
+                                                <option value="renewal">License Renewal</option>
+                                                <option value="verification">Credential Verification</option>
+                                                <option value="foreign">Foreign Medical Graduate</option>
+                                                <option value="other">Other Inquiry</option>
+                                            </select>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label for="message"
+                                                class="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                                            <textarea id="message" name="message" rows="4"
+                                                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"></textarea>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <label class="custom-checkbox">
+                                                <input type="checkbox" name="consent">
+                                                <span class="checkmark"></span>
+                                                <span class="text-sm text-gray-700">I consent to the processing of my
+                                                    personal data in accordance with the privacy policy.</span>
+                                            </label>
+                                        </div>
+                                        <div class="md:col-span-2">
+                                            <button type="submit"
+                                                class="bg-primary text-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-blue-700 transition font-medium">Submit
+                                                Inquiry</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Nurses & Midwives Tab Content -->
+                <div *ngIf="selectedTab === 'nurses'">
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="ri-nurse-line text-primary ri-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-800 mb-2">Nurses & Midwives Licensing</h2>
+                                <p class="text-gray-600">The Nursing and Midwifery Council (NMC) of Uganda regulates the
+                                    practice of nursing and midwifery in Uganda. All nurses and midwives must be
+                                    registered and licensed by the NMC to legally practice in Uganda.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-settings-line text-gray-400 ri-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-2">Content Loading</h3>
+                        <p class="text-gray-600 max-w-md mx-auto mb-8">Detailed information about Nurses & Midwives licensing
+                            is being prepared. Please check back soon or contact the Nursing and Midwifery Council
+                            directly for immediate assistance.</p>
+                    </div>
+                </div>
+                <!-- Allied Health Professionals Tab Content -->
+                <div *ngIf="selectedTab === 'allied'">
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="ri-heart-pulse-line text-primary ri-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-800 mb-2">Allied Health Professionals
+                                    Licensing</h2>
+                                <p class="text-gray-600">The Allied Health Professions Council (AHPC) of Uganda regulates
+                                    various allied health professions including physiotherapy, medical laboratory
+                                    science, radiography, dietetics, and more. All allied health professionals must be
+                                    registered and licensed by the AHPC to legally practice in Uganda.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-settings-line text-gray-400 ri-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-2">Content Loading</h3>
+                        <p class="text-gray-600 max-w-md mx-auto mb-8">Detailed information about Allied Health Professionals
+                            licensing is being prepared. Please check back soon or contact the Allied Health Professions
+                            Council directly for immediate assistance.</p>
+                    </div>
+                </div>
+                <!-- Traditional Medicine Practitioners Tab Content -->
+                <div *ngIf="selectedTab === 'traditional'">
+                    <div class="bg-blue-50 rounded-lg p-6 mb-8">
+                        <div class="flex items-start">
+                            <div
+                                class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+                                <i class="ri-plant-line text-primary ri-lg"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-xl font-semibold text-gray-800 mb-2">Traditional Medicine Practitioners
+                                    Licensing</h2>
+                                <p class="text-gray-600">The Traditional Medicine Practice Council (TMPC) of Uganda
+                                    regulates traditional and alternative medicine practice in Uganda. All traditional
+                                    medicine practitioners must be registered and licensed by the TMPC to legally
+                                    practice in Uganda.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center py-12">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-settings-line text-gray-400 ri-2x"></i>
+                        </div>
+                        <h3 class="text-xl font-medium text-gray-800 mb-2">Content Loading</h3>
+                        <p class="text-gray-600 max-w-md mx-auto mb-8">Detailed information about Traditional Medicine
+                            Practitioners licensing is being prepared. Please check back soon or contact the Traditional
+                            Medicine Practice Council directly for immediate assistance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Call to Action -->
+    <section class="py-12 bg-primary">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-2xl font-bold text-white mb-4">Need Assistance with Your Medical License?</h2>
+            <p class="text-lg text-white opacity-90 max-w-3xl mx-auto mb-8">Our licensing specialists are available to
+                guide you through the application process</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="#"
+                    class="bg-white text-primary px-6 py-3 !rounded-button whitespace-nowrap hover:bg-gray-100 transition font-medium">
+                    Contact Licensing Department
+                </a>
+                <a href=""
+                    data-readdy="true"
+                    class="bg-transparent text-white border border-white px-6 py-3 !rounded-button whitespace-nowrap hover:bg-white/10 transition font-medium">
+                    Verify License Status
+                </a>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <app-footer />
+</div>

@@ -1,0 +1,80 @@
+/* Facility Compliance Dashboard Styles */
+.compliance-card {
+    transition: all 0.3s ease;
+}
+
+.compliance-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card {
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.gap-card {
+    transition: all 0.3s ease;
+}
+
+.gap-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.progress-ring {
+    transform: rotate(-90deg);
+}
+
+.progress-ring-circle {
+    transition: stroke-dashoffset 0.5s ease-in-out;
+}
+
+.forecast-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+.action-button {
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+/* Status indicators */
+.status-excellent {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.status-good {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.status-needs-improvement {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-critical {
+    background-color: #fecaca;
+    color: #991b1b;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .compliance-card {
+        margin-bottom: 16px;
+    }
+    
+    .metric-card {
+        padding: 16px;
+    }
+}

@@ -1,0 +1,54 @@
+/* Stakeholder Logos Styles */
+.partner-card {
+    transition: all 0.3s ease;
+}
+
+.partner-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+    transition: all 0.3s ease;
+}
+
+.logo-container:hover {
+    transform: scale(1.05);
+}
+
+.testimonial-card {
+    transition: all 0.3s ease;
+}
+
+.testimonial-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.partnership-badge {
+    transition: all 0.3s ease;
+}
+
+.partnership-badge:hover {
+    transform: scale(1.05);
+}
+
+.opportunity-card {
+    transition: all 0.3s ease;
+}
+
+.opportunity-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .partner-card {
+        margin-bottom: 16px;
+    }
+    
+    .testimonial-card {
+        padding: 16px;
+    }
+}

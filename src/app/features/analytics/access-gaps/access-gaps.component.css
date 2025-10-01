@@ -1,0 +1,9 @@
+/* Access Gaps Styles */
+.gap-card {
+    transition: all 0.3s ease;
+}
+
+.gap-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}

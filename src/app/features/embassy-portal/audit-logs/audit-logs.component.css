@@ -1,0 +1,8 @@
+/* Audit Logs Styles */
+.log-entry {
+    transition: all 0.3s ease;
+}
+
+.log-entry:hover {
+    background-color: rgba(59, 130, 246, 0.02);
+}

@@ -1,0 +1,213 @@
+<!-- Stakeholder Partners -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Stakeholders Header -->
+    <section class="bg-gradient-to-r from-purple-600 to-pink-700 py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl font-bold text-white mb-4">Our Partners & Stakeholders</h1>
+                <p class="text-xl text-purple-100 mb-8">
+                    Collaborating with leading organizations to strengthen healthcare systems across Africa
+                </p>
+                
+                <!-- Partnership Stats -->
+                <div class="grid md:grid-cols-4 gap-6">
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ stakeholders.length }}</div>
+                        <div class="text-sm text-purple-100">Total Partners</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ getStakeholdersByType('government').length }}</div>
+                        <div class="text-sm text-purple-100">Government Partners</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ getStakeholdersByType('international').length }}</div>
+                        <div class="text-sm text-purple-100">International Orgs</div>
+                    </div>
+                    <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                        <div class="text-2xl font-bold text-white">{{ getStakeholdersByType('academic').length }}</div>
+                        <div class="text-sm text-purple-100">Academic Partners</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Featured Partners -->
+    <section class="py-8 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-8 text-center">Featured Partners</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div *ngFor="let partner of getFeaturedStakeholders()" 
+                     class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <img [src]="partner.logo" [alt]="partner.name + ' logo'" class="w-12 h-12 object-contain">
+                    </div>
+                    <h3 class="font-medium text-gray-800 mb-2">{{ partner.name }}</h3>
+                    <p class="text-sm text-gray-600 mb-3">{{ partner.country }}</p>
+                    <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                          [class]="getPartnershipColor(partner.partnership)">
+                        {{ partner.partnership | titlecase }}
+                    </span>
+                </div>
+            </div>
+            
+            <!-- Testimonials -->
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div *ngFor="let partner of stakeholdersWithTestimonials" 
+                     class="bg-white rounded-lg shadow-sm border p-6">
+                    <div class="flex items-start">
+                        <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-4">
+                            <img [src]="partner.logo" alt="Partner logo" class="w-8 h-8 object-contain">
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-gray-700 italic mb-4">"{{ partner.testimonial?.quote }}"</p>
+                            <div class="text-sm">
+                                <div class="font-medium text-gray-800">{{ partner.testimonial?.author }}</div>
+                                <div class="text-gray-600">{{ partner.testimonial?.title }}</div>
+                                <div class="text-gray-500">{{ partner.name }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- All Partners -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <!-- Filters -->
+            <div class="bg-white rounded-lg shadow-sm p-6 mb-8">
+                <div class="grid md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Partner Type</label>
+                        <select (change)="onTypeChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Types</option>
+                            <option value="government">Government</option>
+                            <option value="regulatory">Regulatory Bodies</option>
+                            <option value="academic">Academic Institutions</option>
+                            <option value="international">International Organizations</option>
+                            <option value="technology">Technology Partners</option>
+                            <option value="healthcare">Healthcare Organizations</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Country/Region</label>
+                        <select (change)="onCountryChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Countries</option>
+                            <option value="Uganda">Uganda</option>
+                            <option value="Ghana">Ghana</option>
+                            <option value="Kenya">Kenya</option>
+                            <option value="Global">Global</option>
+                            <option value="Regional">Regional</option>
+                            <option value="Continental">Continental</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-end">
+                        <button (click)="applyFilters()" 
+                                class="w-full bg-primary text-white px-4 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
+                            <i class="ri-refresh-line mr-2"></i>
+                            Filter Partners
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Partners Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div *ngFor="let stakeholder of filteredStakeholders" 
+                     class="bg-white rounded-lg shadow-sm border hover:shadow-md transition-shadow">
+                    <!-- Partner Header -->
+                    <div class="p-6 border-b border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-4">
+                                    <i [ngClass]="getTypeIcon(stakeholder.type)" class="text-gray-600 text-xl"></i>
+                                </div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-800">{{ stakeholder.name }}</h3>
+                                    <p class="text-sm text-gray-600">{{ stakeholder.country }}</p>
+                                </div>
+                            </div>
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
+                                  [ngClass]="getPartnershipColor(stakeholder.partnership)">
+                                {{ getPartnershipDisplayName(stakeholder.partnership) }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <!-- Partner Details -->
+                    <div class="p-6">
+                        <p class="text-gray-600 mb-4">{{ stakeholder.description }}</p>
+                        
+                        <div class="flex items-center justify-between text-sm">
+                            <span class="text-gray-500">Partner since {{ getYear(stakeholder.since) }}</span>
+                            <a [href]="stakeholder.website" target="_blank" 
+                               class="text-blue-600 hover:text-blue-800 transition">
+                                <i class="ri-external-link-line mr-1"></i>
+                                Visit Website
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Partnership Opportunities -->
+    <section class="py-8 bg-blue-50">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Partnership Opportunities</h2>
+                <p class="text-gray-600 mb-8">
+                    Join our growing network of partners committed to strengthening healthcare systems across Africa
+                </p>
+                
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-government-line text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-800 mb-2">Government Partners</h3>
+                        <p class="text-sm text-gray-600">Ministries of Health and regulatory bodies seeking to modernize healthcare governance</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-graduation-cap-line text-green-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-800 mb-2">Academic Institutions</h3>
+                        <p class="text-sm text-gray-600">Universities and medical schools interested in graduate tracking and workforce planning</p>
+                    </div>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="ri-global-line text-purple-600 text-xl"></i>
+                        </div>
+                        <h3 class="font-medium text-gray-800 mb-2">International Organizations</h3>
+                        <p class="text-sm text-gray-600">Development partners and international bodies supporting health system strengthening</p>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <a routerLink="/contact-us" 
+                       class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition font-medium">
+                        <i class="ri-handshake-line mr-2"></i>
+                        Explore Partnership
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

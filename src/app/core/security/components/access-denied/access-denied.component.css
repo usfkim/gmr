@@ -1,0 +1,29 @@
+/* Access Denied Styles */
+.access-denied-container {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+.security-notice {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+}
+
+.action-button {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.request-id-box {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+    .access-denied-container {
+        padding: 16px;
+    }
+}

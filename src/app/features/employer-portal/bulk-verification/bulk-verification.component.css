@@ -1,0 +1,80 @@
+/* Bulk Verification Styles */
+.upload-zone {
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover {
+    border-color: var(--primary);
+    background-color: rgba(59, 130, 246, 0.02);
+}
+
+.upload-zone.dragover {
+    border-color: var(--primary);
+    background-color: rgba(59, 130, 246, 0.05);
+    transform: scale(1.02);
+}
+
+.verification-job {
+    transition: all 0.3s ease;
+}
+
+.verification-job:hover {
+    background-color: rgba(59, 130, 246, 0.02);
+}
+
+.progress-bar {
+    transition: width 0.5s ease-in-out;
+}
+
+.upload-progress {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+.template-preview {
+    font-family: 'Courier New', monospace;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+}
+
+.action-button {
+    transition: all 0.3s ease;
+}
+
+.action-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* File input styling */
+.file-input-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.file-input-wrapper input[type=file] {
+    position: absolute;
+    left: -9999px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .upload-zone {
+        padding: 16px;
+    }
+    
+    .verification-job {
+        padding: 16px;
+    }
+}

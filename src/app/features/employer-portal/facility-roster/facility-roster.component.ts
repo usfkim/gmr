@@ -1,0 +1,36 @@
+import { Component, OnInit, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-facility-roster',
+  templateUrl: './facility-roster.component.html',
+  styleUrls: ['./facility-roster.component.css']
+})
+export class FacilityRosterComponent implements OnInit {
+  titleService = inject(Title);
+  router = inject(Router);
+  
+  currentUser: any = null;
+  
+  ngOnInit(): void {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    const currentUser = localStorage.getItem('currentUser');
+    
+    if (!isLoggedIn || !currentUser) {
+      this.router.navigate(['/login']);
+      return;
+    }
+    
+    this.currentUser = JSON.parse(currentUser);
+    this.titleService.setTitle('Facility Roster - Employer Portal');
+  }
+
+  logout(): void {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('currentUser');
+    this.router.navigate(['/login']);
+  }
+}

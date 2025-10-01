@@ -1,0 +1,57 @@
+/* Analytics Dashboard Styles */
+.analytics-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.analytics-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.metric-card {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.insight-item {
+    transition: all 0.3s ease;
+}
+
+.insight-item:hover {
+    background-color: rgba(59, 130, 246, 0.02);
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
+}
+
+.trend-indicator {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.recommendation-card {
+    transition: all 0.3s ease;
+}
+
+.recommendation-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .analytics-card {
+        margin-bottom: 16px;
+    }
+    
+    .metric-card {
+        padding: 16px;
+    }
+}

@@ -1,0 +1,261 @@
+<!-- Staff Monitoring Dashboard -->
+<div class="bg-white min-h-screen">
+    <!-- Header Navigation -->
+    <app-header />
+    
+    <!-- Staff Monitoring Header -->
+    <section class="bg-gradient-to-r from-green-600 to-emerald-700 py-6">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between">
+                <div>
+                    <h1 class="text-2xl font-bold text-white mb-1">Staff Monitoring</h1>
+                    <p class="text-green-100">Real-time license tracking and automated alerts</p>
+                    <p class="text-green-200 text-sm mt-1" *ngIf="currentUser">
+                        Logged in as: {{ currentUser.email }}
+                    </p>
+                </div>
+                <div class="flex items-center space-x-3 mt-4 md:mt-0">
+                    <a routerLink="/employer" 
+                       class="bg-white text-green-600 px-4 py-2 rounded-lg hover:bg-gray-50 transition font-medium text-sm">
+                        <i class="ri-arrow-left-line mr-2"></i>
+                        Back to Dashboard
+                    </a>
+                    <button (click)="logout()" 
+                            class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition font-medium text-sm">
+                        <i class="ri-logout-box-line mr-2"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Filters and Search -->
+    <section class="py-6 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-sm p-6">
+                <div class="grid md:grid-cols-5 gap-4">
+                    <div class="md:col-span-2">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="ri-search-line text-gray-400"></i>
+                            </div>
+                            <input type="text" 
+                                   [value]="searchTerm"
+                                   (input)="onSearchChange()"
+                                   placeholder="Search staff by name, license, or department..."
+                                   class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <select (change)="onDepartmentChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Departments</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="ICU">ICU</option>
+                            <option value="Emergency">Emergency</option>
+                            <option value="Surgery">Surgery</option>
+                            <option value="Nursing">Nursing</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <select (change)="onStatusChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Statuses</option>
+                            <option value="active">Active</option>
+                            <option value="suspended">Suspended</option>
+                            <option value="revoked">Revoked</option>
+                            <option value="expired">Expired</option>
+                            <option value="provisional">Provisional</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <select (change)="onRiskLevelChange($any($event.target).value)" 
+                                class="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary">
+                            <option value="all">All Risk Levels</option>
+                            <option value="low">Low Risk (1-3)</option>
+                            <option value="medium">Medium Risk (4-6)</option>
+                            <option value="high">High Risk (7-10)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Staff Grid -->
+    <section class="py-6">
+        <div class="container mx-auto px-4">
+            <div class="bg-white rounded-lg shadow-sm">
+                <!-- Results Header -->
+                <div class="px-6 py-4 border-b border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-semibold text-gray-800">
+                            Staff Members ({{ filteredStaff.length }} found)
+                        </h2>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-sm text-gray-600">Sort by:</span>
+                            <select class="border border-gray-300 rounded px-3 py-1 text-sm">
+                                <option>Name (A-Z)</option>
+                                <option>Risk Score</option>
+                                <option>Expiry Date</option>
+                                <option>Department</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Staff Table -->
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Staff Member
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    License & Status
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Department & Position
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    CPD Progress
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Risk & Alerts
+                                </th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr *ngFor="let staff of filteredStaff" 
+                                class="hover:bg-gray-50 transition-colors"
+                                [class]="staff.alerts.length > 0 ? 'bg-red-50' : ''">
+                                <!-- Staff Member Info -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <div class="w-12 h-12 rounded-full overflow-hidden bg-gray-200 mr-4">
+                                            <img *ngIf="staff.photo" 
+                                                 [src]="staff.photo" 
+                                                 [alt]="staff.name"
+                                                 class="w-full h-full object-cover">
+                                            <div *ngIf="!staff.photo" 
+                                                 class="w-full h-full flex items-center justify-center">
+                                                <i class="ri-user-line text-gray-400"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="text-sm font-medium text-gray-900">{{ staff.name }}</div>
+                                            <div class="text-sm text-gray-500">{{ staff.email }}</div>
+                                            <div class="text-xs text-gray-400">Hired: {{ staff.hireDate | date:'medium' }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                
+                                <!-- License & Status -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ staff.licenseNumber }}</div>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                          [class]="getStatusColor(staff.licenseStatus)">
+                                        {{ staff.licenseStatus }}
+                                    </span>
+                                    <div class="text-xs text-gray-500 mt-1"
+                                         [class]="isExpiringSoon(staff.licenseExpiry) ? 'text-red-600 font-medium' : ''">
+                                        Expires: {{ staff.licenseExpiry | date:'medium' }}
+                                        <span *ngIf="isExpiringSoon(staff.licenseExpiry)" class="block">
+                                            ({{ getDaysUntilExpiry(staff.licenseExpiry) }} days)
+                                        </span>
+                                    </div>
+                                </td>
+                                
+                                <!-- Department & Position -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">{{ staff.department }}</div>
+                                    <div class="text-sm text-gray-500">{{ staff.position }}</div>
+                                    <div class="text-xs text-gray-400" *ngIf="staff.specialty">{{ staff.specialty }}</div>
+                                </td>
+                                
+                                <!-- CPD Progress -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">{{ staff.cpdCredits }}/{{ staff.requiredCredits }}</div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                        <div class="bg-blue-500 h-2 rounded-full" 
+                                             [style.width.%]="(staff.cpdCredits / staff.requiredCredits) * 100"></div>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        {{ ((staff.cpdCredits / staff.requiredCredits) * 100).toFixed(1) }}% Complete
+                                    </div>
+                                </td>
+                                
+                                <!-- Risk & Alerts -->
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium" [class]="getRiskColor(staff.riskScore)">
+                                        Risk: {{ staff.riskScore }}/10
+                                    </div>
+                                    <div *ngIf="staff.alerts.length > 0" class="mt-1">
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                            {{ staff.alerts.length }} Alert(s)
+                                        </span>
+                                    </div>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        Last verified: {{ staff.lastVerification | date:'short' }}
+                                    </div>
+                                </td>
+                                
+                                <!-- Actions -->
+                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div class="flex items-center space-x-2">
+                                        <button (click)="verifyStaff(staff.id)" 
+                                                class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition">
+                                            <i class="ri-refresh-line mr-1"></i>Verify
+                                        </button>
+                                        
+                                        <button *ngIf="isExpiringSoon(staff.licenseExpiry)" 
+                                                (click)="sendReminder(staff.id)"
+                                                class="bg-orange-500 text-white px-3 py-1 rounded text-xs hover:bg-orange-600 transition">
+                                            <i class="ri-mail-line mr-1"></i>Remind
+                                        </button>
+                                        
+                                        <button *ngIf="staff.licenseStatus === 'suspended' || staff.licenseStatus === 'revoked'" 
+                                                (click)="removeFromRoster(staff.id)"
+                                                class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition">
+                                            <i class="ri-user-unfollow-line mr-1"></i>Remove
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="px-6 py-4 border-t border-gray-200">
+                    <div class="flex items-center justify-between">
+                        <div class="text-sm text-gray-700">
+                            Showing {{ filteredStaff.length }} of {{ staffMembers.length }} staff members
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">
+                                Previous
+                            </button>
+                            <span class="px-3 py-1 bg-primary text-white rounded text-sm">1</span>
+                            <button class="px-3 py-1 border border-gray-300 rounded text-sm hover:bg-gray-50">
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <app-footer />
+</div>

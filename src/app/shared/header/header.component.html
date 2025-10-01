@@ -1,0 +1,147 @@
+<header class="glass-header sticky top-0 z-50 transition-transform duration-300 palette-a">
+    <div class="container mx-auto px-4 py-2 flex items-center justify-between">
+        <div class="flex items-center flex-shrink-0">
+            <div class="logo-container mr-4 flex-shrink-0 relative cursor-pointer" routerLink="/">
+                <img src="logo.png" alt="UMR logo" class="logo-img"/>
+            </div>
+        </div>
+        
+        <div class="flex-1 flex items-center justify-center">
+            <nav class="hidden lg:flex items-center space-x-4 nav-icons">
+                <a [routerLink]="['/']" class="icon-link" aria-label="Home">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M3 11.5L12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1V11.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span class="icon-label">Home</span>
+                </a>
+                <a [routerLink]="['/about']" class="icon-link" aria-label="About">
+                    <i class="ri-information-line text-xl"></i>
+                    <span class="icon-label">About</span>
+                </a>
+                <a [routerLink]="['/search-practitioners']" class="icon-link" aria-label="Search">
+                    <i class="ri-search-line text-xl"></i>
+                    <span class="icon-label">Search</span>
+                </a>
+                <a [routerLink]="['/verification-portal']" class="icon-link" aria-label="Verification">
+                    <i class="ri-shield-check-line text-xl"></i>
+                    <span class="icon-label">Verify</span>
+                </a>
+                <a [routerLink]="['/news']" class="icon-link" aria-label="News">
+                    <i class="ri-newspaper-line text-xl"></i>
+                    <span class="icon-label">News</span>
+                </a>
+                <a [routerLink]="['/licensing-info']" class="icon-link" aria-label="Licensing">
+                    <i class="ri-file-list-3-line text-xl"></i>
+                    <span class="icon-label">Licensing</span>
+                </a>
+                <a [routerLink]="['/contact-us']" class="icon-link" aria-label="Contact">
+                    <i class="ri-customer-service-line text-xl"></i>
+                    <span class="icon-label">Contact</span>
+                </a>
+                <a [routerLink]="['/analytics']" class="icon-link" aria-label="Analytics">
+                    <i class="ri-bar-chart-line text-xl"></i>
+                    <span class="icon-label">Analytics</span>
+                </a>
+            </nav>
+        </div>
+        
+        <div class="flex items-center space-x-3 justify-end flex-shrink-0">
+            <div class="desktop-auth hidden lg:flex items-center mr-2">
+                <a routerLink="/login" class="auth-link auth-link-signin" aria-label="Login">Sign in</a>
+                <a routerLink="/register" class="auth-link auth-link-signup" aria-label="Register">Get started</a>
+            </div>
+            
+            <!-- Theme / palette controls -->
+            <div class="hidden lg:flex items-center space-x-2">
+                <button (click)="toggleDark()" class="theme-toggle" [attr.aria-pressed]="darkMode" aria-label="Toggle dark mode" title="Toggle dark mode">
+                    <span class="theme-icon" aria-hidden="true"></span>
+                </button>
+            </div>
+            
+            <button (click)="toggle()" class="mobile-menu-button lg:hidden" aria-label="Open menu">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Premium Mobile Menu -->
+<div class="mobile-menu"
+     [class.open]="showMenu"
+     *ngIf="showMenu">
+    <div class="mobile-menu-content">
+        <div class="mobile-menu-header">
+            <div class="logo-container cursor-pointer" routerLink="/" (click)="toggle()">
+                <img src="logo.png" alt="UMR logo" class="logo-img"/>
+            </div>
+            <button (click)="toggle()" aria-label="Close menu" class="mobile-close-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col">
+            <a [routerLink]="['/']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-home-line"></i>
+                Home
+            </a>
+            <a [routerLink]="['/about']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-information-line"></i>
+                About
+            </a>
+            <a [routerLink]="['/search-practitioners']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-search-line"></i>
+                Search Practitioners
+            </a>
+            <a [routerLink]="['/verification-portal']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-shield-check-line"></i>
+                Verification Portal
+            </a>
+            <a [routerLink]="['/licensing-info']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-file-list-3-line"></i>
+                Licensing Info
+            </a>
+            <a [routerLink]="['/news']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-newspaper-line"></i>
+                News & Updates
+            </a>
+            <a [routerLink]="['/contact-us']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-customer-service-line"></i>
+                Contact Us
+            </a>
+            <a [routerLink]="['/analytics']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-bar-chart-line"></i>
+                Analytics
+            </a>
+            <a [routerLink]="['/country-map']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-global-line"></i>
+                Global Map
+            </a>
+            <a [routerLink]="['/case-studies']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-file-text-line"></i>
+                Case Studies
+            </a>
+            <a [routerLink]="['/public-verification']" (click)="toggle()" class="mobile-nav-item">
+                <i class="ri-qr-scan-line"></i>
+                Public Verification
+            </a>
+        </nav>
+        
+        <div class="mobile-auth-section">
+            <div class="mobile-auth-buttons">
+                <a routerLink="/register" (click)="toggle()" class="mobile-btn-primary">Get Started</a>
+                <a routerLink="/login" (click)="toggle()" class="mobile-btn-secondary">Sign In</a>
+            </div>
+            
+            <div class="mobile-theme-section">
+                <span class="mobile-theme-label">Dark Mode</span>
+                <button (click)="toggleDark()" class="theme-toggle" [attr.aria-pressed]="darkMode" aria-label="Toggle dark mode" title="Toggle dark mode">
+                    <span class="theme-icon" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
